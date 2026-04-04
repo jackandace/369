@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/youme_newborn.html" }
+    { "source": "/youme", "destination": "/youme/index.html" },
+    { "source": "/youme/(.*)", "destination": "/youme/index.html" }
   ]
 }
