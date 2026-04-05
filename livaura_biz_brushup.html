@@ -1,0 +1,349 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pk:#FF7BAC;--pkd:#E5658F;--pkl:#FFD6E7;--pkp:#FFF0F6;
+  --pu:#9B7FD4;--pup:#F0EBFF;--pul:#DDD5FF;
+  --co:#FF9F7A;--cop:#FFF3EE;
+  --dk:#2A2235;--md:#5C5478;--lt:#9E98B0;
+  --bg:#FDFBFF;--wh:#FFFFFF;
+  --r40:40px;--r20:20px;--r12:12px
+}
+body{background:var(--bg);color:var(--dk);font-family:'Zen Maru Gothic',sans-serif;font-size:13px;line-height:1.85}
+
+/* ─── HEADER ─── */
+.hd{background:var(--wh);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #F3EEF9}
+.lb{display:flex;flex-direction:column;gap:1px}
+.lm{font-family:'Outfit',sans-serif;font-size:17px;font-weight:800;letter-spacing:3px;color:var(--pk)}
+.lbz{font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;letter-spacing:3px;color:var(--pu);background:var(--pup);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:1px}
+.hn{display:flex;gap:20px;font-size:11px;color:var(--lt)}
+.hb{background:linear-gradient(135deg,var(--pu),var(--pk));color:white;padding:9px 20px;border-radius:var(--r40);font-size:11px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(155,127,212,.3)}
+
+/* ─── HERO ─── */
+.hero{background:linear-gradient(160deg,#FFF0F8 0%,#F5EEFF 45%,#EEF0FF 100%);padding:72px 24px 60px;text-align:center}
+.hbdg{display:inline-flex;align-items:center;gap:6px;background:var(--wh);color:var(--pu);font-size:10px;font-weight:700;letter-spacing:2px;padding:6px 16px;border-radius:var(--r40);margin-bottom:22px;box-shadow:0 2px 12px rgba(155,127,212,.18);border:1px solid var(--pul)}
+.hero h1{font-size:25px;font-weight:700;line-height:1.65;margin-bottom:10px;color:var(--dk)}
+.hp{color:var(--pk)}.hu{color:var(--pu)}.hc{color:var(--co)}
+.hero-lead{font-size:13px;font-weight:700;color:var(--md);margin-bottom:8px;line-height:1.9}
+.hero-sub{font-size:12px;color:var(--lt);max-width:480px;margin:0 auto 32px;line-height:2.1}
+.brow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.bg{background:linear-gradient(135deg,var(--pu),var(--pk));color:white;padding:14px 32px;border-radius:var(--r40);font-size:13px;font-weight:700;box-shadow:0 6px 20px rgba(155,127,212,.38);border:none;cursor:pointer}
+.bgh{background:var(--wh);color:var(--dk);padding:13px 28px;border-radius:var(--r40);font-size:13px;font-weight:700;border:2px solid #E8E0F4;cursor:pointer;display:flex;align-items:center;gap:8px}
+.ld{width:15px;height:15px;background:#06C755;border-radius:50%;flex-shrink:0}
+.tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tg{background:var(--wh);font-size:10px;color:var(--md);padding:5px 14px;border-radius:var(--r40);border:1px solid #EDE5F8;font-weight:500}
+
+/* ─── STATS ─── */
+.sb{background:var(--wh);padding:24px;display:flex;justify-content:center;border-bottom:1px solid #F3EEF9}
+.st{text-align:center;padding:0 28px;border-right:1px solid #F0EAF8}
+.st:last-child{border:none}
+.sn{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--pk);line-height:1.2}
+.sn span{font-size:13px}
+.sl{font-size:10px;color:var(--lt);margin-top:2px}
+
+/* ─── SECTION COMMON ─── */
+.sec{padding:56px 24px;max-width:720px;margin:0 auto}
+.slb{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:var(--r40);margin-bottom:14px}
+.lp{background:var(--pkp);color:var(--pkd)}
+.lpu{background:var(--pup);color:var(--pu)}
+.lco{background:var(--cop);color:#B05020}
+.sh{font-size:20px;font-weight:700;line-height:1.65;margin-bottom:10px}
+.sd{font-size:12px;color:var(--md);line-height:2.1;margin-bottom:28px}
+
+/* ─── PAIN ─── */
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc{background:var(--wh);border-radius:var(--r12);padding:18px;border:1px solid #F0EAF8;border-left:3px solid #F4B8CC}
+.pi{font-size:20px;margin-bottom:8px}
+.pt{font-size:12px;font-weight:700;color:#C05080;margin-bottom:4px}
+.pb{font-size:11px;color:var(--md);line-height:1.8}
+
+/* ─── SOLUTION ─── */
+.solbg{background:linear-gradient(160deg,#FFF5FF,#F3F0FF);padding:56px 0}
+.soli{max-width:720px;margin:0 auto;padding:0 24px}
+.solcs{display:flex;flex-direction:column;gap:16px;margin-top:24px}
+.solc{background:var(--wh);border-radius:var(--r20);padding:24px;display:flex;gap:18px;box-shadow:0 2px 16px rgba(155,127,212,.1);border:1px solid #F0EAF8}
+.soln{font-family:'Outfit',sans-serif;font-size:34px;font-weight:800;color:var(--pu);opacity:.18;line-height:1;width:44px;flex-shrink:0}
+.sbdg{display:inline-block;background:var(--pup);color:var(--pu);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.stit{font-size:14px;font-weight:700;color:var(--dk);margin-bottom:6px}
+.sbod{font-size:11px;color:var(--md);line-height:1.95}
+
+/* ─── MERIT ─── */
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mc{background:var(--wh);border-radius:var(--r20);padding:22px;box-shadow:0 2px 14px rgba(155,127,212,.08);border:1px solid #F3EEF9;text-align:center}
+.mi{font-size:26px;margin-bottom:10px}
+.mt{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:6px;line-height:1.5}
+.mb{font-size:11px;color:var(--md);line-height:1.8}
+.mres{display:inline-block;background:var(--pkp);color:var(--pkd);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;margin-top:8px}
+
+/* ─── INDUSTRY ─── */
+.inbg{background:linear-gradient(135deg,var(--pkp),var(--pup));padding:56px 0}
+.ini{max-width:720px;margin:0 auto;padding:0 24px}
+.incs{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.inc{background:var(--wh);border-radius:var(--r20);padding:22px;display:flex;gap:16px;border:1px solid #F0EAF8}
+.iav{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ia1{background:var(--pkp)}.ia2{background:var(--cop)}.ia3{background:var(--pup)}
+.it{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:2px}
+.ic{font-size:10px;color:var(--lt);margin-bottom:8px}
+.ib{font-size:11px;color:var(--md);line-height:1.9}
+.ir{display:inline-block;background:var(--pkp);color:var(--pkd);font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;margin-top:8px}
+
+/* ─── FLOW ─── */
+.flbg{background:var(--dk);padding:56px 0}
+.fli{max-width:720px;margin:0 auto;padding:0 24px}
+.fli .sh{color:var(--wh)}
+.fli .slb{background:rgba(155,127,212,.25);color:#C8B8FF}
+.flst{margin-top:24px;display:flex;flex-direction:column}
+.fs{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.fs:last-child{border:none}
+.fc{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--pk));color:white;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(155,127,212,.35)}
+.ftit{font-size:13px;font-weight:700;color:var(--wh);margin-bottom:3px}
+.fbod{font-size:11px;color:rgba(255,255,255,.5);line-height:1.85}
+
+/* ─── FAQ ─── */
+.fqs{padding:56px 24px;max-width:720px;margin:0 auto}
+.fql{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.fqi{background:var(--wh);border-radius:var(--r12);padding:18px 20px;border:1px solid #F0EAF8}
+.fqq{font-size:13px;font-weight:700;color:var(--dk);margin-bottom:7px;display:flex;gap:10px}
+.qb{background:var(--pk);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;flex-shrink:0;font-family:'Outfit',sans-serif}
+.ab{background:var(--pup);color:var(--pu);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;flex-shrink:0;font-family:'Outfit',sans-serif}
+.fqa{font-size:11px;color:var(--md);line-height:1.95;display:flex;gap:10px}
+
+/* ─── CTA ─── */
+.cta{background:linear-gradient(135deg,var(--pu),var(--pk));padding:64px 24px;text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07)}
+.cta::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.cta h2{font-size:21px;font-weight:700;color:var(--wh);line-height:1.75;margin-bottom:10px}
+.cta p{font-size:12px;color:rgba(255,255,255,.82);line-height:2.1;margin-bottom:28px}
+.ctarow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.bwh{background:var(--wh);color:var(--pu);padding:14px 32px;border-radius:var(--r40);font-size:13px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.14);border:none;cursor:pointer}
+.bow{background:transparent;color:var(--wh);padding:13px 28px;border-radius:var(--r40);font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;gap:8px}
+
+/* ─── FOOTER ─── */
+.ft{background:var(--dk);padding:32px 24px;text-align:center}
+.flo{font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;letter-spacing:3px;color:var(--pk);margin-bottom:2px}
+.fbz{font-size:9px;letter-spacing:3px;color:var(--pu);margin-bottom:6px}
+.fdo{font-size:10px;color:#444;margin-bottom:14px}
+.flk{font-size:10px;color:#444;margin-bottom:6px}
+.fcp{font-size:10px;color:#333}
+</style>
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="lb">
+    <div class="lm">LIVAURA</div>
+    <div class="lbz">for Business</div>
+  </div>
+  <div class="hn"><span>メリット</span><span>活用シーン</span><span>流れ</span><span>FAQ</span></div>
+  <div class="hb">無料で相談する</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hbdg">🏪 サロン・飲食店・店舗オーナー向け</div>
+  <h1>
+    スタッフへの<span class="hu">インセンティブ</span>が、<br>
+    そのままお店の<span class="hp">集客エンジン</span>になる。
+  </h1>
+  <div class="hero-lead">スタッフが<span class="hu">活躍できる仕組み</span>をつくれば、<br>お店のアイコンが生まれ、ファンが集まる。</div>
+  <div class="hero-sub">LIVAURAはTikTok LIVEを通じて、スタッフが活躍できる場をつくります。インセンティブとして報酬が還元されるから、スタッフは本気で動く。その結果、お店のブランドが自然と広がっていきます。</div>
+  <div class="brow">
+    <div class="bg">✨ 無料で話を聞いてみる</div>
+    <div class="bgh"><div class="ld"></div>LINEで相談する</div>
+  </div>
+  <div class="tags">
+    <div class="tg">🏪 業種不問</div>
+    <div class="tg">💡 仕組みで動く</div>
+    <div class="tg">👥 スタッフが輝ける</div>
+    <div class="tg">📈 ファンが来店につながる</div>
+    <div class="tg">🆓 初期費用ゼロ</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="sb">
+  <div class="st"><div class="sn">0<span>円</span></div><div class="sl">初期費用・月額費用</div></div>
+  <div class="st"><div class="sn">5<span>アプリ</span></div><div class="sl">対応プラットフォーム</div></div>
+  <div class="st"><div class="sn">全<span>国</span></div><div class="sl">どこからでもOK</div></div>
+</div>
+
+<!-- PROBLEM -->
+<div class="sec">
+  <div class="slb lco">😓 こんな課題ありませんか</div>
+  <div class="sh">集客の仕組みが、<br>うまく回っていない。</div>
+  <div class="pg">
+    <div class="pc"><div class="pi">📉</div><div class="pt">広告費が成果に結びつかない</div><div class="pb">SNS広告を出しても費用対効果が見えず、改善の糸口がつかめない。</div></div>
+    <div class="pc"><div class="pi">🔕</div><div class="pt">店舗SNSが伸びない</div><div class="pb">アカウントを作っても更新が続かず、フォロワーが増えていかない。</div></div>
+    <div class="pc"><div class="pi">👤</div><div class="pt">新規のお客さんが来ない</div><div class="pb">リピーターは安定しているのに、新規顧客の獲得に課題を感じている。</div></div>
+    <div class="pc"><div class="pi">💼</div><div class="pt">スタッフに長く活躍してほしい</div><div class="pb">優秀なスタッフが定着する、魅力的な職場環境をつくっていきたい。</div></div>
+  </div>
+</div>
+
+<!-- SOLUTION -->
+<div class="solbg">
+  <div class="soli">
+    <div class="slb lpu">✅ LIVAURAの仕組み</div>
+    <div class="sh">3つの連鎖が、<br>お店を変えていく。</div>
+    <div class="solcs">
+
+      <div class="solc">
+        <div class="soln">01</div>
+        <div>
+          <div class="sbdg">インセンティブ設計</div>
+          <div class="stit">活躍に報いるから、スタッフが本気になる</div>
+          <div class="sbod">TikTok LIVEでの活動に対してインセンティブとして報酬が還元される仕組みをLIVAURAが設計します。「依頼しやすい」「やる気が出る」環境が整うことで、スタッフが自発的に動き始めます。</div>
+        </div>
+      </div>
+
+      <div class="solc">
+        <div class="soln">02</div>
+        <div>
+          <div class="sbdg">アイコン化</div>
+          <div class="stit">スタッフがお店の顔・アイコンになる</div>
+          <div class="sbod">本気で活動するスタッフは、フォロワーから「あのお店のあの人」として認知されます。外部のインフルエンサーに依頼するより、自社スタッフが顔になった方が信頼度も親近感も圧倒的に高い。</div>
+        </div>
+      </div>
+
+      <div class="solc">
+        <div class="soln">03</div>
+        <div>
+          <div class="sbdg">集客への連動</div>
+          <div class="stit">スタッフのファンが、そのままお客さんになる</div>
+          <div class="sbod">フォロワーが増えるほど、「会いに行きたい」「お店に行ってみたい」というファンが生まれます。広告ではなく、人を通じた集客だからこそ、来店率・リピート率ともに高い成果につながります。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MERIT -->
+<div class="sec">
+  <div class="slb lp">🌟 オーナーとスタッフ、両方にとってのメリット</div>
+  <div class="sh">Win-Winだから、<br>仕組みが長続きする。</div>
+  <div class="sd">オーナーにとってもスタッフにとっても「やってよかった」と思える仕組みだからこそ、長期的に機能し続けます。</div>
+  <div class="mg">
+    <div class="mc">
+      <div class="mi">📣</div>
+      <div class="mt">広告費をかけずに<br>新規客が来る</div>
+      <div class="mb">スタッフのフォロワーが自然と来店。費用対効果の見えない広告から卒業できます。</div>
+      <div class="mres">オーナーのメリット</div>
+    </div>
+    <div class="mc">
+      <div class="mi">⭐</div>
+      <div class="mt">自社にアイコンが<br>生まれるブランド力</div>
+      <div class="mb">フォロワーを持つスタッフが在籍するだけで、お店の存在感・信頼感が高まります。</div>
+      <div class="mres">オーナーのメリット</div>
+    </div>
+    <div class="mc">
+      <div class="mi">💡</div>
+      <div class="mt">活躍に見合った<br>インセンティブが得られる</div>
+      <div class="mb">配信活動への報酬がきちんと還元されるから、スタッフのモチベーションが持続します。</div>
+      <div class="mres">スタッフのメリット</div>
+    </div>
+    <div class="mc">
+      <div class="mi">🎯</div>
+      <div class="mt">「ここで輝ける」が<br>定着につながる</div>
+      <div class="mb">TikTokで認知が広がり、お店のアイコンとして活躍できる環境が離職率を下げます。</div>
+      <div class="mres">スタッフのメリット</div>
+    </div>
+  </div>
+</div>
+
+<!-- INDUSTRY -->
+<div class="inbg">
+  <div class="ini">
+    <div class="slb lpu">🏪 活用シーン</div>
+    <div class="sh">こんなお店・業種で<br>活用されています。</div>
+    <div class="incs">
+      <div class="inc">
+        <div class="iav ia1">💇</div>
+        <div>
+          <div class="it">美容室・サロン系</div>
+          <div class="ic">ヘアサロン / ネイル / まつエク / エステ / 頭皮ケア</div>
+          <div class="ib">スタイリストが施術の様子をLIVE配信→「この人に担当してもらいたい」とファンが来店予約。スタッフ個人の魅力がそのまま指名集客につながります。</div>
+          <div class="ir">✅ スタッフ指名・再来率が上がる</div>
+        </div>
+      </div>
+      <div class="inc">
+        <div class="iav ia2">🍽️</div>
+        <div>
+          <div class="it">飲食店・カフェ・バー</div>
+          <div class="ic">レストラン / カフェ / 居酒屋 / バー / テイクアウト</div>
+          <div class="ib">仕込みや店内の雰囲気をLIVEで発信→「行ってみたい」というファンが来店。スタッフのキャラクターでリピーターも増え、自然なクチコミが生まれます。</div>
+          <div class="ir">✅ 新規来店・リピーター増</div>
+        </div>
+      </div>
+      <div class="inc">
+        <div class="iav ia3">👗</div>
+        <div>
+          <div class="it">物販・アパレル・セレクトショップ</div>
+          <div class="ic">アパレル / コスメ / アクセサリー / 雑貨 / EC連動</div>
+          <div class="ib">商品紹介をLIVEコマース形式で発信→その場で購入・来店に直結。スタッフが商品の世界観ごと伝えることで、広告にはない温度感が生まれます。</div>
+          <div class="ir">✅ LIVEコマースで売上に直結</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOW -->
+<div class="flbg">
+  <div class="fli">
+    <div class="slb">🚀 導入の流れ</div>
+    <div class="sh">スタートまでの4ステップ</div>
+    <div class="flst">
+      <div class="fs"><div class="fc">01</div><div><div class="ftit">無料相談・ヒアリング</div><div class="fbod">業種・スタッフ構成・目標をオンラインでヒアリング。どんな業種・規模でもまずはお気軽にご連絡ください。</div></div></div>
+      <div class="fs"><div class="fc">02</div><div><div class="ftit">スタッフ選定・研修</div><div class="fbod">活躍に向いているスタッフを一緒に選定。TikTok配信の基礎から話し方・演出まで丁寧にサポートします。</div></div></div>
+      <div class="fs"><div class="fc">03</div><div><div class="ftit">アカウント設計・配信スタート</div><div class="fbod">お店のブランドに合ったアカウントを設計。専属マネージャーが初配信から伴走します。</div></div></div>
+      <div class="fs"><div class="fc">04</div><div><div class="ftit">ファン拡大 → 集客へ連動</div><div class="fbod">フォロワーが増えるにつれ来店・予約・売上への連動が生まれます。仕組みが回り始めたら、あとは活動を続けるだけ。</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="fqs">
+  <div class="slb lpu">❓ よくある質問</div>
+  <div class="sh">お気軽にご相談ください</div>
+  <div class="fql">
+    <div class="fqi">
+      <div class="fqq"><span class="qb">Q</span>どんな業種でも対応できますか？</div>
+      <div class="fqa"><span class="ab">A</span><span>はい。スタッフが在籍する店舗であれば、業種・規模を問わず対応しています。まずはご相談ください。</span></div>
+    </div>
+    <div class="fqi">
+      <div class="fqq"><span class="qb">Q</span>スタッフがTikTok未経験でも大丈夫ですか？</div>
+      <div class="fqa"><span class="ab">A</span><span>問題ありません。配信の基礎・話し方・演出まで、専属マネージャーが研修から伴走します。</span></div>
+    </div>
+    <div class="fqi">
+      <div class="fqq"><span class="qb">Q</span>インセンティブの仕組みはどうなっていますか？</div>
+      <div class="fqa"><span class="ab">A</span><span>TikTok LIVEでの配信活動に対して報酬が還元される仕組みです。詳しいプランはご相談時にご説明します。</span></div>
+    </div>
+    <div class="fqi">
+      <div class="fqq"><span class="qb">Q</span>お店の宣伝はどのようにしてもらえますか？</div>
+      <div class="fqa"><span class="ab">A</span><span>強制ではなく、スタッフのキャラクターを活かした自然な発信を基本とします。「広告感のない」リアルな紹介が最も効果的です。</span></div>
+    </div>
+    <div class="fqi">
+      <div class="fqq"><span class="qb">Q</span>費用はかかりますか？</div>
+      <div class="fqa"><span class="ab">A</span><span>初期費用は無料です。詳しいプランはご相談時にご案内します。広告費との比較でも、費用対効果の高い仕組みです。</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>スタッフの活躍が、<br>そのままお店の力になる仕組みを<br>一緒につくりませんか？</h2>
+  <p>まずは無料相談から。業種・規模を問わずお気軽に。<br>オンライン30分で、あなたのお店に合った活用方法をご提案します。</p>
+  <div class="ctarow">
+    <div class="bwh">✨ 無料で相談してみる</div>
+    <div class="bow"><div class="ld"></div>LINEで相談する</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="ft">
+  <div class="flo">LIVAURA</div>
+  <div class="fbz">FOR BUSINESS</div>
+  <div class="fdo">livaura.jp</div>
+  <div class="flk">プライバシーポリシー　｜　特定商取引法に基づく表記</div>
+  <div class="fcp">© 2025 LIVAURA All Rights Reserved.</div>
+</div>
