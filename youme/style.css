@@ -978,3 +978,151 @@ footer {
   .masonry { columns: 1; }
   .badge { flex: 0 0 100%; }
 }
+
+/* ===== SLIDESHOW ===== */
+.hero-slideshow {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.slide.active { opacity: 1; }
+.slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.slide-dots {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.dot.active {
+  background: white;
+  transform: scale(1.3);
+}
+
+/* ===== INSTAGRAM BUTTON ===== */
+.btn-insta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid var(--blue-mid);
+  color: var(--blue-dark);
+  padding: 14px 28px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  border-radius: 1px;
+  transition: all 0.3s;
+}
+.btn-insta:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  color: white;
+}
+
+/* ===== FINAL CTA Instagram ===== */
+.fc-insta {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+.fc-insta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-light);
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.fc-insta a:hover { color: var(--blue-dark); }
+
+/* ===== FOOTER SNS ===== */
+.ft-sns {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ft-sns-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.2s;
+}
+.ft-sns-link:hover { color: white; }
+.ft-line {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  font-family: 'Cormorant Garamond', serif;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 10px;
+}
+
+/* ===== AREA section (inline style → CSS) ===== */
+#area {
+  background: var(--bg-off);
+  padding: 80px 80px 80px 120px;
+}
+.area-cities {
+  font-size: 15px;
+  color: var(--blue-dark);
+  font-family: 'Noto Serif JP', serif;
+  line-height: 2.2;
+  margin-bottom: 16px;
+}
+.area-note {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 40px;
+}
+
+/* ===== ANNIVERSARY section ===== */
+#anniversary { padding: 100px 80px 100px 120px; background: var(--bg); }
+.anniv-lead {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 2.1;
+  max-width: 520px;
+  margin-bottom: 56px;
+}
+
+/* ===== SP overrides for new elements ===== */
+@media (max-width: 768px) {
+  .hero-slideshow { height: 75vw; min-height: 260px; }
+  .slide-dots { bottom: 14px; }
+
+  #area { padding: 64px 20px !important; }
+  .area-cities { font-size: 14px; }
+
+  #anniversary { padding: 64px 20px !important; }
+  .anniv-lead { font-size: 13px; margin-bottom: 36px; }
+
+  .portfolio-cta .btn-insta { width: 100%; justify-content: center; }
+
+  .fc-insta a { font-size: 13px; }
+
+  footer { flex-direction: column; gap: 16px; text-align: center; padding: 36px 20px 90px; }
+  .ft-sns { justify-content: center; }
+}
