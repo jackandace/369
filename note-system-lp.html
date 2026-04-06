@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>note 運用支援 | 合同会社369</title>
+<meta name="description" content="AIと戦略設計で、noteを最速で認知・問い合わせ拡大の装置に変える。月30記事・分析・戦略まで完全おまかせ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#00B84A;
+  --black:#111111;
+  --white:#FFFFFF;
+  --gray:#F5F5F5;
+  --gray2:#888888;
+  --sans:'Noto Sans JP',sans-serif;
+  --display:'Noto Sans JP',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--black);font-family:var(--sans);font-weight:400;line-height:1.7;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);
+  border-bottom:1px solid #E8E8E8;
+}
+.nav-logo{display:block;width:72px;height:72px;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;object-fit:cover;}
+.nav-links{display:flex;gap:36px;font-size:13px;font-weight:700;letter-spacing:.05em;}
+.nav-links a{padding:4px 0;border-bottom:2px solid transparent;transition:border-color .15s;}
+.nav-links a:hover{border-color:var(--orange);}
+.nav-cta{
+  background:var(--black);color:var(--white);
+  font-size:13px;font-weight:700;letter-spacing:.1em;
+  padding:0 36px;height:72px;display:flex;align-items:center;gap:8px;
+  flex-shrink:0;transition:background .15s;
+}
+.nav-cta:hover{background:var(--orange);}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:120px 60px 80px;
+  border-bottom:1px solid #E8E8E8;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:.2em;
+  color:var(--orange);margin-bottom:32px;
+}
+.hero-tag::before{content:'';display:block;width:32px;height:2px;background:var(--orange);}
+.hero h1{
+  font-family:var(--sans);font-weight:900;
+  font-size:clamp(40px,6vw,80px);
+  line-height:1.2;letter-spacing:-.01em;
+  margin-bottom:32px;max-width:900px;
+}
+.hero h1 span{color:var(--orange);}
+.hero-sub{
+  font-size:16px;color:#555;line-height:2;
+  max-width:500px;margin-bottom:52px;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-orange{
+  background:var(--orange);color:var(--white);
+  font-size:14px;font-weight:700;letter-spacing:.08em;
+  padding:18px 40px;transition:opacity .15s;
+}
+.btn-orange:hover{opacity:.88;}
+.btn-outline{
+  border:2px solid var(--black);color:var(--black);
+  font-size:14px;font-weight:700;letter-spacing:.08em;
+  padding:16px 40px;transition:all .15s;
+}
+.btn-outline:hover{background:var(--black);color:var(--white);}
+.hero-nums{
+  display:flex;gap:0;margin-top:72px;
+  border-top:1px solid #E8E8E8;
+}
+.hero-num{
+  flex:1;padding:32px 0;
+  border-right:1px solid #E8E8E8;
+  padding-right:40px;margin-right:40px;
+}
+.hero-num:last-child{border:none;}
+.hero-num-val{
+  font-family:var(--display);font-size:52px;font-weight:900;
+  color:var(--orange);line-height:1;letter-spacing:-.02em;
+}
+.hero-num-label{font-size:12px;color:#888;margin-top:6px;font-weight:700;letter-spacing:.05em;}
+
+/* SECTIONS */
+section{padding:100px 60px;max-width:1200px;margin:0 auto;}
+.full-section{padding:100px 60px;}
+.sec-tag{
+  font-size:11px;font-weight:700;letter-spacing:.25em;
+  color:var(--orange);margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-tag::before{content:'';display:block;width:24px;height:2px;background:var(--orange);}
+h2{
+  font-weight:900;
+  font-size:clamp(28px,4vw,52px);
+  line-height:1.25;letter-spacing:-.01em;
+  margin-bottom:20px;
+}
+h2 span{color:var(--orange);}
+.lead{font-size:15px;color:#555;line-height:2;max-width:560px;}
+hr.divider{border:none;border-top:1px solid #E8E8E8;margin:0 60px;}
+
+/* PROBLEMS */
+.prob-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:2px;background:#E8E8E8;
+  margin-top:60px;
+}
+.prob-item{
+  background:var(--white);padding:40px;
+}
+.prob-num{font-family:var(--display);font-size:48px;font-weight:900;color:#F0F0F0;line-height:1;margin-bottom:12px;}
+.prob-text{font-size:16px;font-weight:700;line-height:1.6;}
+
+/* WHY */
+.why-orange{
+  background:var(--orange);padding:100px 60px;
+  color:var(--white);
+}
+.why-orange .sec-tag{color:rgba(255,255,255,.6);}
+.why-orange .sec-tag::before{background:rgba(255,255,255,.6);}
+.why-orange h2{color:var(--white);}
+.why-orange h2 span{color:var(--white);text-decoration:underline;text-decoration-color:rgba(255,255,255,.4);}
+.why-orange .lead{color:rgba(255,255,255,.8);}
+.why-body{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;align-items:start;}
+.why-text p{font-size:15px;color:rgba(255,255,255,.8);line-height:2;margin-bottom:20px;}
+.why-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:rgba(255,255,255,.2);}
+.why-stat{background:rgba(0,0,0,.15);padding:28px 24px;}
+.why-stat-val{font-family:var(--display);font-size:44px;font-weight:900;color:var(--white);line-height:1;}
+.why-stat-unit{font-size:16px;}
+.why-stat-label{font-size:11px;color:rgba(255,255,255,.6);margin-top:6px;font-weight:700;letter-spacing:.05em;}
+
+/* PLANS */
+.plans-tabs{display:flex;gap:2px;background:#E8E8E8;margin-top:60px;}
+.plans-tab-content{margin-top:2px;}
+.plan-pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#E8E8E8;}
+.plan-card{background:var(--white);padding:48px 40px;}
+.plan-card.featured{background:var(--black);color:var(--white);}
+.plan-label{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.2em;
+  border:2px solid var(--orange);color:var(--orange);
+  padding:4px 14px;margin-bottom:28px;
+}
+.plan-card.featured .plan-label{border-color:var(--white);color:var(--white);}
+.plan-name{font-size:24px;font-weight:900;margin-bottom:8px;letter-spacing:-.01em;}
+.plan-desc{font-size:13px;color:#777;line-height:1.9;margin-bottom:32px;}
+.plan-card.featured .plan-desc{color:rgba(255,255,255,.6);}
+.plan-price{
+  font-family:var(--display);font-size:52px;font-weight:900;color:var(--orange);
+  line-height:1;margin-bottom:6px;
+}
+.plan-price .yen{font-size:24px;}
+.plan-price-note{font-size:11px;color:#999;margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid #E8E8E8;}
+.plan-card.featured .plan-price-note{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.4);}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:40px;}
+.plan-features li{font-size:13px;color:#444;padding-left:22px;position:relative;line-height:1.6;}
+.plan-features li::before{content:'';position:absolute;left:0;top:8px;width:8px;height:2px;background:var(--orange);}
+.plan-card.featured .plan-features li{color:rgba(255,255,255,.75);}
+.plan-card.featured .plan-features li::before{background:var(--white);}
+.plan-cta-link{
+  display:block;text-align:center;
+  background:var(--orange);color:var(--white);
+  font-size:13px;font-weight:700;letter-spacing:.1em;
+  padding:16px;transition:opacity .15s;
+}
+.plan-cta-link:hover{opacity:.88;}
+.plan-cta-link.outline{
+  background:transparent;border:2px solid var(--white);color:var(--white);
+}
+.plan-cta-link.outline:hover{background:var(--white);color:var(--black);}
+
+/* MONTHLY */
+.m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#E8E8E8;margin-top:40px;}
+.m-card{background:var(--white);padding:36px 28px;position:relative;}
+.m-card.pop{background:var(--gray);}
+.m-popular{
+  position:absolute;top:0;right:0;
+  background:var(--orange);color:var(--white);
+  font-size:10px;font-weight:700;letter-spacing:.15em;
+  padding:5px 14px;
+}
+.m-tier{font-size:11px;font-weight:700;letter-spacing:.2em;color:#aaa;margin-bottom:16px;}
+.m-count{font-family:var(--display);font-size:40px;font-weight:900;color:var(--orange);line-height:1;}
+.m-count-unit{font-size:15px;}
+.m-price{font-size:28px;font-weight:900;margin:16px 0 4px;}
+.m-price .yen{font-size:14px;font-weight:400;}
+.m-per{font-size:10px;color:#aaa;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #E8E8E8;}
+.m-feats{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.m-feats li{font-size:12px;color:#555;padding-left:16px;position:relative;line-height:1.6;}
+.m-feats li::before{content:'';position:absolute;left:0;top:8px;width:6px;height:2px;background:var(--orange);}
+
+/* OPTIONS */
+.opts{margin-top:40px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#E8E8E8;}
+.opt-row{background:var(--white);padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.opt-name{font-size:14px;font-weight:700;margin-bottom:4px;}
+.opt-desc{font-size:12px;color:#888;}
+.opt-price{font-size:17px;font-weight:900;color:var(--orange);white-space:nowrap;}
+
+/* TUNING */
+.tuning-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:#E8E8E8;margin-top:40px;}
+.tuning-item{background:var(--white);padding:28px 32px;}
+.tuning-name{font-size:14px;font-weight:700;margin-bottom:6px;}
+.tuning-price{font-size:13px;color:var(--orange);font-weight:700;margin-bottom:6px;}
+.tuning-desc{font-size:12px;color:#888;line-height:1.7;}
+
+/* FLOW */
+.flow-wrap{display:grid;grid-template-columns:repeat(5,1fr);margin-top:60px;gap:0;}
+.flow-step{padding:36px 20px 36px 24px;border-right:1px solid #E8E8E8;}
+.flow-step:last-child{border:none;}
+.flow-n{font-family:var(--display);font-size:60px;font-weight:900;color:#F0F0F0;line-height:1;margin-bottom:16px;}
+.flow-title{font-size:14px;font-weight:900;margin-bottom:8px;}
+.flow-desc{font-size:12px;color:#888;line-height:1.8;}
+
+/* CTA ORANGE */
+.cta-orange{
+  background:var(--orange);padding:100px 60px;
+  color:var(--white);text-align:center;
+}
+.cta-orange h2{color:var(--white);margin-bottom:16px;}
+.cta-orange p{font-size:15px;color:rgba(255,255,255,.8);margin-bottom:52px;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-white{
+  background:var(--white);color:var(--black);
+  font-size:14px;font-weight:700;letter-spacing:.08em;padding:18px 40px;
+  transition:opacity .15s;
+}
+.btn-white:hover{opacity:.9;}
+.btn-white-outline{
+  border:2px solid rgba(255,255,255,.6);color:var(--white);
+  font-size:14px;font-weight:700;letter-spacing:.08em;padding:16px 40px;
+  transition:all .15s;
+}
+.btn-white-outline:hover{background:rgba(255,255,255,.15);}
+.cta-tel{margin-top:40px;font-size:13px;color:rgba(255,255,255,.6);}
+.cta-tel strong{font-family:var(--display);font-size:32px;font-weight:700;color:var(--white);display:block;margin-top:4px;}
+
+/* FOOTER */
+footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 60px;height:72px;
+  border-top:1px solid #E8E8E8;
+}
+.footer-logo{display:flex;align-items:center;gap:14px;}
+.footer-logo img{width:40px;height:40px;display:block;}
+.footer-logo span{font-size:13px;font-weight:700;}
+.footer-copy{font-size:11px;color:#aaa;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{height:60px;}
+  .nav-logo{width:60px;height:60px;}
+  .nav-links{display:none;}
+  .nav-cta{padding:0 20px;height:60px;font-size:12px;}
+  .hero,.full-section{padding:90px 24px 60px;}
+  section{padding:72px 24px;}
+  hr.divider{margin:0 24px;}
+  .hero-nums{flex-direction:column;gap:0;}
+  .hero-num{border-right:none;border-bottom:1px solid #E8E8E8;padding:24px 0;margin:0;}
+  .prob-grid,.plan-pair,.m-grid,.opts,.tuning-grid{grid-template-columns:1fr;}
+  .why-body{grid-template-columns:1fr;}
+  .flow-wrap{grid-template-columns:1fr 1fr;gap:2px;background:#E8E8E8;}
+  .flow-step{border:none;background:var(--white);padding:28px 20px;}
+  footer{flex-direction:column;gap:12px;height:auto;padding:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://369labo.jp" class="nav-logo">
+    <img src="https://raw.githubusercontent.com/jackandace/369/main/note-lp/logo.png" alt="369">
+  </a>
+  <div class="nav-links">
+    <a href="#plans">プラン</a>
+    <a href="#flow">進め方</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+  <a href="#contact" class="nav-cta">CONTACT 💬</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">note 運用支援サービス</div>
+  <h1>AIと戦略設計で、<br>noteを<span>認知・問い合わせ</span>の<br>最速装置に変える。</h1>
+  <p class="hero-sub">月30記事の量産・SEO設計・分析レポートまで、369のチームが丸ごと担います。あなたは判断とコアビジネスに集中してください。</p>
+  <div class="hero-btns">
+    <a href="#plans" class="btn-orange">プランを見る</a>
+    <a href="#contact" class="btn-outline">まず相談する</a>
+  </div>
+  <div class="hero-nums">
+    <div class="hero-num">
+      <div class="hero-num-val">30<span style="font-size:24px">本</span></div>
+      <div class="hero-num-label">月間最大投稿数</div>
+    </div>
+    <div class="hero-num">
+      <div class="hero-num-val">1/3</div>
+      <div class="hero-num-label">AI活用による工数圧縮</div>
+    </div>
+    <div class="hero-num">
+      <div class="hero-num-val">¥88,000</div>
+      <div class="hero-num-label">買い切り統合導入パック</div>
+    </div>
+    <div class="hero-num">
+      <div class="hero-num-val">24H</div>
+      <div class="hero-num-label">お問い合わせ返信目安</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- PROBLEMS -->
+<section>
+  <div class="sec-tag">課題</div>
+  <h2>こんな悩み、<span>ありませんか。</span></h2>
+  <div class="prob-grid">
+    <div class="prob-item">
+      <div class="prob-num">01</div>
+      <div class="prob-text">「noteやろう」と思っても<br>何を書けばいいか分からない</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">02</div>
+      <div class="prob-text">記事を書く時間がない。<br>リソースが社内にない</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">03</div>
+      <div class="prob-text">投稿しても反応がない。<br>成果に繋がっている実感がない</div>
+    </div>
+    <div class="prob-item">
+      <div class="prob-num">04</div>
+      <div class="prob-text">SEOやKW設計まで手が回らず<br>広告頼みが続いている</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOTE -->
+<div class="why-orange full-section">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="sec-tag">なぜ note か</div>
+    <h2>検索×信頼×問い合わせを<br><span>同時に</span>獲得できる</h2>
+    <div class="why-body">
+      <div class="why-text">
+        <p>noteはGoogleにインデックスされやすく、記事が資産として積み上がります。広告費ゼロで毎月の問い合わせを増やせる、数少ないオーガニックチャネルです。</p>
+        <p>369は独自のSEOツールとAI生成フローで、月30本の記事を高速に量産。あなたのビジネスに合った検索クエリを設計し、「読まれて→信頼されて→問い合わせが来る」導線を最初から組み込みます。</p>
+        <p>変化を恐れず、流れをつくる側に立つ。<br>ALL DAWN. さあ、次の時代を創りに行こう。</p>
+      </div>
+      <div class="why-stats">
+        <div class="why-stat">
+          <div class="why-stat-val">30<span class="why-stat-unit">本</span></div>
+          <div class="why-stat-label">月間最大投稿数</div>
+        </div>
+        <div class="why-stat">
+          <div class="why-stat-val">AI</div>
+          <div class="why-stat-label">工数を1/3に圧縮</div>
+        </div>
+        <div class="why-stat">
+          <div class="why-stat-val">KW</div>
+          <div class="why-stat-label">業界特化クエリ設計</div>
+        </div>
+        <div class="why-stat">
+          <div class="why-stat-val">月次</div>
+          <div class="why-stat-label">数字を戦略に変えるレポート</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANS -->
+<section id="plans">
+  <div class="sec-tag">プラン</div>
+  <h2>2つのアプローチから<br><span>選んでください。</span></h2>
+  <p class="lead">ツールを導入して自走したい方も、全部任せたい方も。目的と体制に合わせてご提案します。</p>
+  <div class="plan-pair">
+    <div class="plan-card">
+      <div class="plan-label">BUYOUT · 買い切り</div>
+      <div class="plan-name">統合導入パック</div>
+      <p class="plan-desc">戦略・ツール・マニュアルを一括納品。クライアント別に専用URLとログインを発行し、自走できる状態にして渡します。</p>
+      <div class="plan-price"><span class="yen">¥</span>88,000</div>
+      <div class="plan-price-note">買い切り一括 / 税別。月額プランへの移行時は全額充当可。</div>
+      <ul class="plan-features">
+        <li>コンテンツ戦略立案（ペルソナ / 競合 / 3ヶ月ロードマップ）</li>
+        <li>KWクエリ設定（ボリューム優先度付き一覧）</li>
+        <li>初月30記事分のテーマ・構成設計</li>
+        <li>投稿管理シート生成（初期設定済み）</li>
+        <li>運用マニュアル整備（PDF納品）</li>
+        <li>ツールサイト個別URL発行 + 専用ログイン払い出し</li>
+        <li>初期レクチャー（使い方説明）込み</li>
+      </ul>
+      <a href="#contact" class="plan-cta-link">導入を相談する</a>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-label">SUBSCRIPTION · 月額おまかせ</div>
+      <div class="plan-name">記事制作 完全代行</div>
+      <p class="plan-desc">記事の生成・編集・投稿から分析レポートまで、369チームが毎月まるごと担います。あなたは確認するだけ。</p>
+      <div class="plan-price"><span class="yen">¥</span>29,800<span style="font-size:20px;font-weight:400;color:#aaa"> 〜 / 月</span></div>
+      <div class="plan-price-note">買い切りパックと同時申込で ¥20,000 OFF</div>
+      <ul class="plan-features">
+        <li>ライト（月8記事）¥29,800 / スタンダード（月15記事）¥49,800</li>
+        <li>グロース（月30記事）¥79,800 — 月1回戦略MTG込み</li>
+        <li>AI生成 + 人力編集済み記事を毎月納品</li>
+        <li>月次レポート（スタンダード以上は詳細版）</li>
+        <li>戦略チャット相談（プランに応じて）</li>
+        <li>問い合わせ動線設計（グロースプラン）</li>
+      </ul>
+      <a href="#plans-detail" class="plan-cta-link outline">プラン詳細を見る ↓</a>
+    </div>
+  </div>
+</section>
+
+<section id="plans-detail" style="padding-top:0">
+  <div class="sec-tag">月額プラン 詳細</div>
+  <h2 style="font-size:clamp(22px,3vw,36px)">記事量 × サポート深度で<span>選ぶ</span></h2>
+  <div class="m-grid">
+    <div class="m-card">
+      <div class="m-tier">LIGHT</div>
+      <div class="m-count">8<span class="m-count-unit">記事 / 月</span></div>
+      <div class="m-price"><span class="yen">¥</span>29,800<span style="font-size:12px;font-weight:400;color:#aaa"> / 月</span></div>
+      <div class="m-per">1記事あたり 約 ¥3,725</div>
+      <ul class="m-feats">
+        <li>AI生成 + 編集済み記事 8本</li>
+        <li>月次サマリーレポート（簡易）</li>
+      </ul>
+    </div>
+    <div class="m-card pop">
+      <div class="m-popular">POPULAR</div>
+      <div class="m-tier">STANDARD</div>
+      <div class="m-count">15<span class="m-count-unit">記事 / 月</span></div>
+      <div class="m-price"><span class="yen">¥</span>49,800<span style="font-size:12px;font-weight:400;color:#aaa"> / 月</span></div>
+      <div class="m-per">1記事あたり 約 ¥3,320</div>
+      <ul class="m-feats">
+        <li>AI生成 + 編集済み記事 15本</li>
+        <li>月次詳細レポート</li>
+        <li>チャット相談（月4回）</li>
+      </ul>
+    </div>
+    <div class="m-card">
+      <div class="m-tier">GROWTH</div>
+      <div class="m-count">30<span class="m-count-unit">記事 / 月</span></div>
+      <div class="m-price"><span class="yen">¥</span>79,800<span style="font-size:12px;font-weight:400;color:#aaa"> / 月</span></div>
+      <div class="m-per">1記事あたり 約 ¥2,660</div>
+      <ul class="m-feats">
+        <li>AI生成 + 編集済み記事 30本</li>
+        <li>月次詳細レポート + 戦略提案</li>
+        <li>チャット相談（無制限）</li>
+        <li>月1回 戦略MTG（60分）</li>
+        <li>問い合わせ動線設計</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:48px;">
+    <div class="sec-tag">オプション</div>
+    <div class="opts">
+      <div class="opt-row"><div><div class="opt-name">追加記事</div><div class="opt-desc">プラン上限を超えた分に適用</div></div><div class="opt-price">¥3,500 / 記事</div></div>
+      <div class="opt-row"><div><div class="opt-name">競合分析レポート</div><div class="opt-desc">業界・競合KWの深掘り調査</div></div><div class="opt-price">¥30,000（初回）</div></div>
+      <div class="opt-row"><div><div class="opt-name">SNS拡散設計</div><div class="opt-desc">X / Instagram転載 + ハッシュタグ設計</div></div><div class="opt-price">¥20,000 / 月</div></div>
+      <div class="opt-row"><div><div class="opt-name">追加戦略MTG</div><div class="opt-desc">グロース以外でも単発利用可（60分）</div></div><div class="opt-price">¥15,000 / 回</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FLOW -->
+<section id="flow">
+  <div class="sec-tag">進め方</div>
+  <h2>お申込みから<span>稼働まで。</span></h2>
+  <div class="flow-wrap">
+    <div class="flow-step">
+      <div class="flow-n">01</div>
+      <div class="flow-title">ヒアリング</div>
+      <div class="flow-desc">ビジネス概要・ターゲット・競合を確認します</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">02</div>
+      <div class="flow-title">戦略設計</div>
+      <div class="flow-desc">KW・ペルソナ・コンテンツカレンダーを設計し共有</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">03</div>
+      <div class="flow-title">ツール納品</div>
+      <div class="flow-desc">専用URL発行・管理シート・マニュアルを納品</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">04</div>
+      <div class="flow-title">記事量産</div>
+      <div class="flow-desc">AI + 人力で毎月記事を生成・投稿（月額のみ）</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-n">05</div>
+      <div class="flow-title">分析・改善</div>
+      <div class="flow-desc">月次レポートをもとに戦略をアップデート</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TUNING -->
+<section>
+  <div class="sec-tag">買い切り後のチューニング</div>
+  <h2>変化に合わせて<span>追加発注。</span></h2>
+  <p class="lead">買い切り後の機能追加・KW変更・マニュアル改訂は都度見積もりで対応。月額費用は発生しません。</p>
+  <div class="tuning-grid">
+    <div class="tuning-item"><div class="tuning-name">KW・クエリ追加設定</div><div class="tuning-price">¥15,000〜 / 回</div><div class="tuning-desc">事業領域の拡大・季節対応など KW を追加・再設計。</div></div>
+    <div class="tuning-item"><div class="tuning-name">ツール機能アップデート</div><div class="tuning-price">¥20,000〜 / 回</div><div class="tuning-desc">分析ビュー追加・管理シート改修・UI変更など。</div></div>
+    <div class="tuning-item"><div class="tuning-name">マニュアル改訂・追記</div><div class="tuning-price">¥10,000〜 / 回</div><div class="tuning-desc">フロー変更・新機能追加に伴うマニュアルの更新対応。</div></div>
+    <div class="tuning-item"><div class="tuning-name">戦略レビュー・ピボット支援</div><div class="tuning-price">¥30,000〜 / 回</div><div class="tuning-desc">3〜6ヶ月後のデータを元に KW・ペルソナを再設計。</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-orange" id="contact">
+  <div class="sec-tag" style="justify-content:center">CONTACT</div>
+  <h2>まず、話しましょう。</h2>
+  <p>プランに迷っている方・自社に合うか確認したい方、お気軽にご相談ください。</p>
+  <div class="cta-btns">
+    <a href="mailto:info@369labo.jp" class="btn-white">メールで相談する</a>
+    <a href="https://369labo.jp" class="btn-white-outline">369 LABO トップへ</a>
+  </div>
+  <div class="cta-tel">
+    お電話でのお問い合わせ
+    <strong>090-5614-3939</strong>
+    10:00〜19:00（平日）
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="https://raw.githubusercontent.com/jackandace/369/main/note-lp/logo.png" alt="369">
+    <span>合同会社369</span>
+  </div>
+  <div class="footer-copy">© 369LLC. All Rights Reserved.</div>
+</footer>
+
+</body>
+</html>
