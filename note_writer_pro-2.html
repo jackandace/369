@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>note記事ライター Pro — 369</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+:root{
+  --g:#22c55e;--g-dark:#16a34a;--g-light:#f0fdf4;--g-border:#bbf7d0;
+  --ink:#111;--muted:#9ca3af;--muted2:#6b7280;
+  --surface:#f9fafb;--border:#e5e7eb;--red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:var(--ink);font-size:14px;line-height:1.7;}
+
+/* HDR */
+.hdr{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;}
+.hdr-logo{width:34px;height:34px;background:var(--g);border-radius:5px;display:flex;align-items:center;justify-content:center;}
+.hdr-logo span{color:#fff;font-size:12px;font-weight:900;letter-spacing:-1px;}
+.hdr-title{font-size:11px;font-weight:500;color:var(--muted2);letter-spacing:.14em;text-transform:uppercase;margin-left:11px;}
+.hdr-stats{display:flex;gap:20px;align-items:baseline;}
+.hdr-stat-num{font-size:20px;font-weight:900;color:var(--g);}
+.hdr-stat-label{font-size:10px;color:var(--muted);margin-left:3px;letter-spacing:.04em;}
+
+/* FLOW NAV — タブ兼フローバー */
+.flow-nav{display:flex;border-bottom:1px solid var(--border);background:#fff;}
+.flow-step{flex:1;display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;border-right:1px solid var(--border);transition:background .12s;position:relative;}
+.flow-step:last-child{border-right:none;}
+.flow-step:hover{background:var(--surface);}
+.flow-step.active{background:var(--g-light);}
+.flow-step.active .fn-num{background:var(--g);}
+.flow-step.active .fn-title{color:var(--g);}
+.fn-sep{width:1px;background:var(--border);align-self:stretch;margin:0;}
+/* 管理設定は左にセパレーター+背景色で区別 */
+#fn-3{background:var(--surface);border-left:1px solid var(--border);}
+.fn-num{width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .12s;}
+.fn-title{font-size:12px;font-weight:700;color:var(--ink);}
+.fn-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.fn-arrow{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:8px solid var(--border);z-index:2;}
+.flow-step.active .fn-arrow{border-left-color:var(--g-border);}
+.flow-step:last-child .fn-arrow{display:none;}
+.fn-icon{width:18px;height:18px;flex-shrink:0;color:var(--muted2);}
+.flow-step.active .fn-icon{color:var(--g);}
+
+/* BODY */
+.app-body{background:var(--surface);min-height:calc(100vh - 52px - 49px);}
+.main-wrap{max-width:860px;margin:0 auto;padding:28px 24px;}
+
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
+
+/* SEC */
+.sec{background:#fff;border:1px solid var(--border);padding:18px 20px;margin-bottom:12px;}
+.sec.highlight{border-color:var(--g);border-width:2px;}
+.sec-ttl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin-bottom:4px;}
+.sec-sub{font-size:12px;color:var(--muted2);margin-bottom:12px;}
+
+/* FORM */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.row1{margin-bottom:10px;}
+label{font-size:11px;font-weight:500;color:var(--muted2);display:block;margin-bottom:4px;letter-spacing:.04em;}
+input,select,textarea{width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--border);background:#fff;color:var(--ink);font-family:'Noto Sans JP',sans-serif;transition:border-color .12s;border-radius:0;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g);}
+textarea{resize:vertical;line-height:1.7;}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.chip{font-size:11px;padding:5px 12px;border:1px solid var(--border);cursor:pointer;color:var(--muted2);transition:all .12s;user-select:none;background:#fff;}
+.chip:hover{border-color:var(--g);color:var(--g);}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g);font-weight:700;}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:13px;background:var(--ink);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:background .12s;letter-spacing:.06em;text-transform:uppercase;}
+.btn-primary:hover{background:var(--g);}
+.btn-sm{font-size:11px;padding:6px 14px;border:1px solid var(--border);background:#fff;color:var(--ink);cursor:pointer;transition:all .12s;white-space:nowrap;letter-spacing:.03em;}
+.btn-sm:hover{border-color:var(--ink);}
+.btn-green{background:var(--g);color:#fff;border-color:var(--g);}
+.btn-green:hover{background:var(--g-dark);border-color:var(--g-dark);}
+.btn-danger{font-size:11px;padding:6px 14px;border:1px solid #fca5a5;background:#fff;color:var(--red);cursor:pointer;}
+.btn-dl{width:100%;padding:12px;background:var(--g);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;transition:background .12s;text-transform:uppercase;letter-spacing:.06em;}
+.btn-dl:hover{background:var(--g-dark);}
+
+/* KW GRID */
+.kw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;margin-top:10px;}
+.kw-card{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 10px;border:1px solid var(--border);background:#fff;cursor:pointer;transition:all .12s;}
+.kw-card:hover,.kw-card.selected{border-color:var(--g);background:var(--g-light);}
+.kw-card.done{opacity:.35;cursor:default;}
+.kw-card.done .kw-label{text-decoration:line-through;}
+.kw-card-left{display:flex;align-items:center;gap:7px;min-width:0;}
+.kw-pri{font-size:9px;font-weight:900;padding:2px 5px;flex-shrink:0;letter-spacing:.03em;}
+.pri-high{background:var(--g);color:#fff;}
+.pri-mid{background:var(--ink);color:#fff;}
+.pri-low{background:var(--border);color:var(--muted2);}
+.kw-label{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kw-type{font-size:10px;color:var(--muted);}
+.kw-del{opacity:0;font-size:14px;color:var(--muted);cursor:pointer;padding:0 2px;flex-shrink:0;transition:opacity .12s;line-height:1;border:none;background:none;}
+.kw-card:hover .kw-del{opacity:1;}
+.kw-del:hover{color:var(--red);}
+
+/* OUTPUT */
+.out-box{background:#fff;border:1px solid var(--border);padding:16px 18px;margin-top:12px;display:none;}
+.out-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.out-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+pre{white-space:pre-wrap;font-family:'Noto Sans JP',sans-serif;font-size:12px;line-height:1.9;color:var(--ink);max-height:420px;overflow-y:auto;background:var(--surface);border:1px solid var(--border);padding:13px 15px;}
+.hint{font-size:12px;color:var(--muted2);margin-top:9px;line-height:1.7;padding:9px 13px;border-left:3px solid var(--g);background:var(--surface);}
+.posted-form{background:var(--g-light);border:1px solid var(--g-border);padding:12px 14px;margin-top:10px;display:none;}
+.posted-form p{font-size:12px;font-weight:700;margin-bottom:8px;letter-spacing:.04em;}
+.posted-row{display:flex;gap:8px;}
+.posted-row input{flex:1;}
+
+/* PUB LIST */
+.pub-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
+.pub-item:last-child{border-bottom:none;}
+.pub-num{font-size:11px;font-weight:900;color:var(--g);min-width:18px;}
+.pub-text{font-size:12px;line-height:1.5;}
+.pub-kw{font-size:10px;color:var(--muted);}
+
+/* ACCORDION */
+.accordion{border:1px solid var(--border);margin-top:12px;}
+.acc-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;cursor:pointer;background:#fff;}
+.acc-hdr:hover{background:var(--surface);}
+.acc-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);}
+.acc-body{padding:14px 16px;border-top:1px solid var(--border);background:#fff;display:none;}
+.acc-body.open{display:block;}
+.acc-arr{font-size:10px;color:var(--muted);transition:transform .2s;}
+.acc-arr.open{transform:rotate(180deg);}
+
+/* THUMB */
+.thumb-design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;}
+.design-card{border:2px solid var(--border);padding:0;cursor:pointer;transition:all .12s;overflow:hidden;}
+.design-card:hover{border-color:var(--g);}
+.design-card.selected{border-color:var(--g);border-width:2px;}
+.design-preview{height:60px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;letter-spacing:.04em;}
+.design-label{font-size:10px;padding:4px 8px;text-align:center;color:var(--muted2);background:#fff;border-top:1px solid var(--border);}
+.canvas-wrap{background:var(--surface);border:1px solid var(--border);padding:8px;text-align:center;margin-top:10px;}
+canvas{max-width:100%;height:auto;box-shadow:0 2px 12px rgba(0,0,0,.1);}
+
+/* COLOR SWATCHES */
+.swatch-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s;}
+.swatch.selected{border-color:var(--ink);}
+
+/* FORMAT EDIT */
+.format-sample{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--g);padding:14px 16px;margin-top:10px;font-size:12px;line-height:1.9;color:var(--muted2);}
+.format-sample strong{color:var(--ink);}
+.spec-table{width:100%;font-size:13px;border-collapse:collapse;}
+.spec-table td{padding:8px 0;border-bottom:1px solid var(--border);vertical-align:top;}
+.spec-table td:first-child{font-weight:700;width:32%;padding-right:12px;}
+.spec-table td:last-child{color:var(--muted2);}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div style="display:flex;align-items:center;">
+    <div class="hdr-logo"><span>369</span></div>
+    <span class="hdr-title">note 記事ライター Pro</span>
+  </div>
+  <div class="hdr-stats">
+    <div><span class="hdr-stat-num" id="stat-done">0</span><span class="hdr-stat-label">投稿済み</span></div>
+    <div><span class="hdr-stat-num" id="stat-remain">0</span><span class="hdr-stat-label">候補残り</span></div>
+  </div>
+</div>
+
+<!-- FLOW NAV（タブ兼フローバー） -->
+<div class="flow-nav">
+  <div class="flow-step active" id="fn-0" onclick="showStep(0)">
+    <svg class="fn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M7 10l2 2 4-4"/></svg>
+    <div><div class="fn-title">KW選択 &amp; 記事生成</div><div class="fn-desc">キーワードを選びプロンプト生成</div></div>
+    <div class="fn-num">1</div>
+    <div class="fn-arrow"></div>
+  </div>
+  <div class="flow-step" id="fn-1" onclick="showStep(1)">
+    <svg class="fn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="16" height="12" rx="1"/><path d="M2 14l4-4 3 3 3-4 6 5"/></svg>
+    <div><div class="fn-title">サムネイル生成</div><div class="fn-desc">デザイン選択 → PNG保存</div></div>
+    <div class="fn-num">2</div>
+    <div class="fn-arrow"></div>
+  </div>
+  <div class="flow-step" id="fn-2" onclick="showStep(2)">
+    <svg class="fn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h12v12H4z" stroke-width="1.5"/><path d="M8 10h4M10 8v4"/></svg>
+    <div><div class="fn-title">投稿済みに追加</div><div class="fn-desc">タイトルを登録してリスト更新</div></div>
+    <div class="fn-num">3</div>
+    <div class="fn-arrow"></div>
+  </div>
+  <div class="flow-step" id="fn-3" onclick="showStep(3)" style="flex:0 0 auto;width:160px;">
+    <svg class="fn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.9 4.9l1.4 1.4M13.7 13.7l1.4 1.4M4.9 15.1l1.4-1.4M13.7 6.3l1.4-1.4"/></svg>
+    <div><div class="fn-title">管理 &amp; 設定</div><div class="fn-desc">KW・プロンプト編集</div></div>
+  </div>
+</div>
+
+<div class="app-body">
+<div class="main-wrap">
+
+<!-- ======= STEP 1: KW + 生成 ======= -->
+<div class="panel active" id="step-0">
+
+  <!-- KW選択 -->
+  <div class="sec highlight">
+    <div class="sec-label">Step 01 — キーワードを選ぶ</div>
+    <div class="sec-sub">カードをクリックで自動入力。直接入力も可能です。</div>
+    <input id="kw-input" placeholder="例：楽器 仕入れ 業者　（選択または直接入力）" style="font-size:14px;padding:10px 12px;margin-bottom:10px;">
+    <div class="kw-grid" id="kw-list"></div>
+    <!-- KW追加フォーム -->
+    <div style="display:flex;gap:6px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+      <input id="sb-kw" placeholder="新しいキーワードを追加..." style="flex:1;font-size:12px;padding:7px 10px;">
+      <select id="sb-type" style="font-size:11px;padding:7px 8px;width:90px;"><option>購買意図</option><option>情報収集</option><option>比較検討</option><option>特定業種</option></select>
+      <select id="sb-pri" style="font-size:11px;padding:7px 8px;width:56px;"><option value="high">高</option><option value="mid" selected>中</option><option value="low">低</option></select>
+      <button class="btn-sm btn-green" onclick="sbAddKw()">＋ 追加</button>
+    </div>
+  </div>
+
+  <!-- 設定 -->
+  <div class="sec">
+    <div class="sec-ttl">Step 02 — 記事の設定</div>
+    <div class="row2">
+      <div><label>記事タイプ</label>
+        <select id="atype">
+          <option>情報収集（開業・初心者向け）</option>
+          <option>購買意図（問い合わせに近い）</option>
+          <option>比較検討（業者選び）</option>
+          <option>特定業種向け（ニッチ）</option>
+        </select>
+      </div>
+      <div><label>読了時間</label>
+        <select id="rtime">
+          <option>約5分</option><option selected>約7分</option><option>約8分</option><option>約10分</option>
+        </select>
+      </div>
+    </div>
+    <label>追加オプション（選択中は緑）</label>
+    <div class="chips" id="elem-chips">
+      <span class="chip on" data-v="数字">具体的な数字・試算</span>
+      <span class="chip on" data-v="ステップ">ステップ形式</span>
+      <span class="chip" data-v="業種別">業種別アドバイス</span>
+      <span class="chip on" data-v="事例">エピソード・事例</span>
+      <span class="chip" data-v="比較">比較表</span>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="generate()">プロンプト生成 → 新チャットに貼り付けて1本完成</button>
+
+  <div class="out-box" id="out-box">
+    <div class="out-head">
+      <span class="out-label" id="out-label">生成されたプロンプト</span>
+      <button class="btn-sm" id="copy-btn" onclick="doCopy()">コピー</button>
+    </div>
+    <pre id="out-pre"></pre>
+    <div class="hint">このプロンプトをコピーして <strong>Claudeの新しいチャット</strong> に貼り付けてください。</div>
+    <div class="posted-form" id="posted-form">
+      <p>記事ができたら投稿済みリストに追加</p>
+      <div class="posted-row">
+        <input id="posted-title" placeholder="投稿した記事タイトルを入力">
+        <button class="btn-sm btn-green" onclick="markPosted()">追加</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /step-0 -->
+
+<!-- ======= STEP 2: THUMBNAIL ======= -->
+<div class="panel" id="step-1">
+  <div class="sec">
+    <div class="sec-ttl">テキスト入力</div>
+    <div class="row1">
+      <label>メインテキスト（Enterで改行）</label>
+      <textarea id="th-main" rows="3" oninput="drawThumb()">楽器をAmazonで仕入れるのが
+「損」な理由</textarea>
+    </div>
+    <div class="row2">
+      <div><label>サブテキスト</label><input id="th-sub" value="法人が使うべき卸業者ルートとは" oninput="drawThumb()"></div>
+      <div><label>ブランド名（下部帯）</label><input id="th-brand" value="株式会社ミツエス" oninput="drawThumb()"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-ttl">デザインパターンを選ぶ</div>
+    <div class="thumb-design-grid" id="design-grid"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-ttl">カラーテーマ</div>
+    <div class="swatch-grid" id="th-swatches"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-ttl">プレビュー</div>
+    <button class="btn-sm" style="width:100%;margin-bottom:8px;" onclick="drawThumb()">プレビュー更新</button>
+    <div class="canvas-wrap">
+      <canvas id="thumb-canvas" width="1920" height="1006"></canvas>
+    </div>
+    <button class="btn-dl" onclick="downloadThumb()">⬇ PNG をダウンロード（1920 × 1006px）</button>
+  </div>
+</div>
+
+<!-- ======= STEP 3: POSTED ======= -->
+<div class="panel" id="step-2">
+  <div class="sec">
+    <div class="sec-label">投稿済みに追加する</div>
+    <div class="sec-sub">記事を投稿したらタイトルを登録してください。次回のプロンプトに自動反映されます。</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <input id="p3-title" placeholder="投稿した記事タイトルを入力" style="flex:1;">
+      <input id="p3-kw" placeholder="キーワード（任意）" style="width:200px;">
+      <button class="btn-sm btn-green" onclick="p3Post()">+ 登録</button>
+    </div>
+    <div id="pub-list-2"></div>
+  </div>
+</div>
+
+<!-- ======= STEP 4: MANAGE ======= -->
+<div class="panel" id="step-3">
+  <div class="sec">
+    <div class="sec-ttl">プロンプト編集</div>
+    <p style="font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.7;">変更後「保存」を押すと次回の生成に反映されます。</p>
+    <div class="row1"><label>企業サービス・ターゲット</label><textarea id="edit-service" rows="6" style="font-size:12px;"></textarea></div>
+    <div class="row1"><label>CTA文（問い合わせ案内）</label><textarea id="edit-cta" rows="5" style="font-size:12px;"></textarea></div>
+    <div class="row1"><label>執筆ルール</label><textarea id="edit-rules" rows="8" style="font-size:12px;"></textarea></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-sm btn-green" style="flex:1;padding:10px;" onclick="savePromptSettings()">保存する</button>
+      <button class="btn-danger" onclick="resetPromptSettings()">初期値に戻す</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-ttl">noteフォーマット設定</div>
+    <p style="font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.7;">記事のフォーマットテンプレートを編集できます。右のプレビューにリアルタイムで反映されます。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;">
+      <div>
+        <label>フォーマットテンプレート</label>
+        <textarea id="edit-format" rows="26" style="font-size:12px;line-height:1.8;" oninput="updateFormatPreview()"></textarea>
+      </div>
+      <div>
+        <label style="color:var(--g);font-weight:700;">▼ リアルタイムプレビュー（サンプル）</label>
+        <div id="format-preview" class="format-sample" style="min-height:200px;white-space:pre-wrap;font-family:'Noto Sans JP',sans-serif;font-size:12px;line-height:1.9;overflow-y:auto;max-height:480px;"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn-sm btn-green" style="flex:1;padding:10px;" onclick="saveFormat()">フォーマットを保存</button>
+      <button class="btn-danger" onclick="resetFormat()">初期値に戻す</button>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-ttl">全データリセット</div>
+    <p style="font-size:12px;color:var(--muted2);margin-bottom:10px;">投稿済みリスト・キーワード候補・プロンプト設定をすべて初期状態に戻します。</p>
+    <button class="btn-danger" onclick="resetAll()">全データをリセット</button>
+  </div>
+</div>
+
+</div><!-- /main-wrap -->
+</div><!-- /app-body -->
+
+<script>
+// ── デフォルトデータ ──
+const DEF_PUB=[
+  {title:'①音楽教室・楽器店の開業で迷う「楽器の仕入れ方法」｜卸業者との取引を始める完全ガイド',kw:'楽器 仕入れ方法 開業'},
+  {title:'②楽器をAmazonで仕入れるのが「損」な理由｜法人が使うべき卸業者ルートとは',kw:'楽器 Amazon仕入れ デメリット'},
+  {title:'③楽器の卸業者の選び方｜法人仕入れで失敗しないための5つのチェックポイント',kw:'楽器 卸業者 比較'},
+  {title:'④楽器レンタル事業の始め方｜在庫調達・仕入れルートの作り方を解説',kw:'楽器レンタル 事業 始め方'},
+];
+const DEF_KW=[
+  {kw:'楽器 仕入れ 業者',type:'購買意図',pri:'high'},
+  {kw:'音楽スタジオ 開業 費用 楽器',type:'情報収集',pri:'high'},
+  {kw:'楽器 卸 価格 相場',type:'比較検討',pri:'high'},
+  {kw:'楽器 大量購入 どこで買う',type:'購買意図',pri:'mid'},
+  {kw:'楽器 法人 調達方法',type:'情報収集',pri:'mid'},
+  {kw:'楽器 まとめ買い メリット',type:'情報収集',pri:'mid'},
+  {kw:'PA機材 業者仕入れ 方法',type:'特定業種',pri:'mid'},
+  {kw:'楽器 卸サービス 評判',type:'比較検討',pri:'low'},
+  {kw:'楽器 仕入れ先 選び方',type:'比較検討',pri:'low'},
+  {kw:'楽器 メーカー直仕入れ vs 卸業者',type:'比較検討',pri:'low'},
+];
+const DEF_SERVICE=`【企業サービス】
+・楽器の法人向け卸販売（BtoB仕入れ）
+・楽器のまとめ買い・大量購入の仕入れ提供
+・楽器店・音楽教室・スタジオなど開業時の楽器調達サポート
+・イベント会社・レンタル会社向け楽器仕入れ供給
+・Amazonなど小売経由ではなく業者仕入れルートの提供
+→「法人向け楽器卸・仕入れサービス」
+
+【ターゲット】
+① 新規開業層：楽器店・音楽教室・音楽スタジオの開業者
+② イベント・レンタル会社：楽器レンタル会社、イベント運営会社、音響・PA関連会社`;
+const DEF_CTA=`━━━━━━━━━━━━━━━━━━━━
+【楽器の法人仕入れ・まとめ買いのご相談はこちら】
+
+当社では、音楽教室・楽器店・スタジオ・レンタル会社など
+法人・事業者様向けに楽器の卸販売を行っております。
+見積もりだけのご相談も歓迎しています。
+
+▶ お問い合わせ・無料見積もりはこちら
+━━━━━━━━━━━━━━━━━━━━`;
+const DEF_RULES=`・文字数：2,000〜3,000字
+・短い行で改行を多用（noteの読みやすさ重視）
+・読みやすい日本語、専門用語はわかりやすく説明
+・導入文：読者の悩みへの共感から始まる2〜3段落
+・AIっぽい抽象表現・一般論・宣伝記事は禁止
+・キーワードを自然に含める
+・見出しはキャッチーなコピー（説明的にしない）
+・投稿済み記事と内容が重複しない新しい切り口で書く
+・タイトル提案不要。最適なタイトルをあなたが決めてそのまま本文から書く`;
+const DEF_FORMAT=`[タイトル]タイトル（SEOキーワードを含む35字前後）
+
+この記事は[読了時間]で読めます
+
+1分でわかるこの記事
+
+・要点1（**重要語**を太字）
+・要点2（**重要語**を太字）
+・要点3（**重要語**を太字）
+・要点4（**重要語**を太字）
+・要点5（**重要語**を太字）
+
+---
+
+## 見出し1（キャッチーなコピー）
+
+本文（300〜400字）
+短い行で改行を多用する。
+**重要なキーワード**は太字にする。
+
+---
+
+## 見出し2〜5（同様に続ける）
+
+---
+
+## よくある質問（Q&A）
+
+**Q. 質問1**
+A. 回答（明確・簡潔・AI検索に引用されやすい形式）
+
+**Q. 質問2〜4（同様）**
+
+---
+
+## まとめ
+
+2〜3段落。次のアクションへ自然に誘導。`;
+
+let published=[...DEF_PUB], keywords=[...DEF_KW];
+let promptService=DEF_SERVICE, promptCta=DEF_CTA, promptRules=DEF_RULES, promptFormat=DEF_FORMAT;
+const opts=new Set(['数字','ステップ','事例']);
+
+// ── ストレージ ──
+const _mem={};
+function sv(k,v){const s=JSON.stringify(v);_mem[k]=s;try{localStorage.setItem(k,s);}catch{}}
+function ld(k,def){if(_mem[k])try{return JSON.parse(_mem[k]);}catch{}try{const r=localStorage.getItem(k);if(r)return JSON.parse(r);}catch{}return def;}
+
+function init(){
+  published=ld('pub4',DEF_PUB);
+  keywords=ld('kw4',DEF_KW);
+  promptService=ld('ps4',DEF_SERVICE);
+  promptCta=ld('pc4',DEF_CTA);
+  promptRules=ld('pr4',DEF_RULES);
+  promptFormat=ld('pf4',DEF_FORMAT);
+  renderAll();
+  loadEditors();
+  buildDesigns();
+  buildSwatches();
+  setTimeout(drawThumb,200);
+}
+
+function renderAll(){renderKw();renderPub();renderPub2();updateStats();}
+
+function renderKw(){
+  const done=published.map(p=>p.kw);
+  const el=document.getElementById('kw-list');
+  if(!el)return;
+  if(!keywords.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);padding:8px 0;">キーワードがありません。下の入力欄から追加してください。</div>';return;}
+  const priL={high:'高',mid:'中',low:'低'}, priC={high:'pri-high',mid:'pri-mid',low:'pri-low'};
+  el.innerHTML=keywords.map((k,i)=>{
+    const isDone=done.includes(k.kw);
+    return `<div class="kw-card${isDone?' done':''}" ${isDone?'':'onclick="selectKw('+i+')"'} id="kw-c-${i}">
+      <div class="kw-card-left">
+        <span class="kw-pri ${priC[k.pri]||'pri-low'}">${priL[k.pri]||'?'}</span>
+        <div><div class="kw-label">${k.kw}</div><div class="kw-type">${k.type}${isDone?' ✓':''}</div></div>
+      </div>
+      ${isDone?'':'<button class="kw-del" onclick="event.stopPropagation();removeKw('+i+')" title="削除">×</button>'}
+    </div>`;
+  }).join('');
+}
+
+function renderPub(){
+  const el=document.getElementById('pub-list');
+  if(!el)return;
+  el.innerHTML=published.length?published.map((p,i)=>`
+    <div class="pub-item">
+      <span class="pub-num">${i+1}</span>
+      <div><div class="pub-text">${p.title}</div><div class="pub-kw">${p.kw||''}</div></div>
+    </div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:8px 0;">まだ投稿済み記事がありません</div>';
+}
+
+function renderPub2(){
+  const el=document.getElementById('pub-list-2');
+  if(!el)return;
+  el.innerHTML=published.length?published.map((p,i)=>`
+    <div class="pub-item">
+      <span class="pub-num">${i+1}</span>
+      <div style="flex:1"><div class="pub-text">${p.title}</div><div class="pub-kw">${p.kw||''}</div></div>
+      <button class="btn-danger" style="font-size:10px;padding:3px 8px;" onclick="deletePub(${i})">削除</button>
+    </div>`).join(''):'<div style="font-size:12px;color:var(--muted);padding:8px 0;">まだ投稿済み記事がありません</div>';
+}
+
+function updateStats(){
+  const done=published.map(p=>p.kw);
+  document.getElementById('stat-done').textContent=published.length;
+  document.getElementById('stat-remain').textContent=keywords.filter(k=>!done.includes(k.kw)).length;
+}
+
+function selectKw(i){
+  const k=keywords[i];
+  document.getElementById('kw-input').value=k.kw;
+  const s=document.getElementById('atype');
+  for(const o of s.options){if(o.value.includes(k.type)){s.value=o.value;break;}}
+  document.querySelectorAll('.kw-card').forEach((el,j)=>el.classList.toggle('selected',j===i));
+  document.getElementById('kw-input').focus();
+}
+
+document.querySelectorAll('#elem-chips .chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    const v=c.dataset.v;
+    opts.has(v)?(opts.delete(v),c.classList.remove('on')):(opts.add(v),c.classList.add('on'));
+  });
+});
+
+function sbAddKw(){
+  const kw=document.getElementById('sb-kw').value.trim();
+  if(!kw)return;
+  keywords.push({kw,type:document.getElementById('sb-type').value,pri:document.getElementById('sb-pri').value});
+  sv('kw4',keywords);document.getElementById('sb-kw').value='';renderAll();
+}
+
+function removeKw(i){
+  if(!confirm(`「${keywords[i].kw}」を削除しますか？`))return;
+  keywords.splice(i,1);sv('kw4',keywords);renderAll();
+}
+
+function generate(){
+  const kw=document.getElementById('kw-input').value.trim();
+  if(!kw){alert('キーワードを入力してください');return;}
+  const atype=document.getElementById('atype').value;
+  const rtime=document.getElementById('rtime').value;
+  const extras=[
+    opts.has('数字')&&'・具体的な数字・金額・試算を必ず含める',
+    opts.has('ステップ')&&'・手順はSTEP 1〜の形式で説明する',
+    opts.has('業種別')&&'・業種別（音楽教室・スタジオ・レンタル・イベント）のアドバイスを入れる',
+    opts.has('事例')&&'・具体的なエピソード・事例を入れてストーリー性を出す',
+    opts.has('比較')&&'・重要な比較ポイントを表形式でまとめる',
+  ].filter(Boolean);
+  const pubLines=published.map((p,i)=>`${i+1}本目：${p.title}`).join('\n');
+  const nextNum=published.length+1;
+  const numEmoji=['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'][nextNum-1]||`${nextNum}`;
+  const fmt=promptFormat.replace('[タイトル]',numEmoji).replace('[読了時間]',rtime);
+
+  const prompt=`あなたは企業オウンドメディアのプロ編集ライター兼SEOコンサルタントです。
+以下のプロジェクト情報をすべて読み込んで、次の1本を最初から最後まで書き上げてください。
+
+${'═'.repeat(52)}
+${promptService}
+
+【投稿済み記事（内容重複厳禁）】
+${pubLines}
+
+${'═'.repeat(52)}
+【今回書く記事】
+・記事番号：${nextNum}本目（タイトルの先頭に ${numEmoji} をつける）
+・メインキーワード：${kw}
+・記事タイプ：${atype}
+・読了時間：${rtime}
+${extras.length?'\n【追加指示】\n'+extras.join('\n'):''}
+
+${'═'.repeat(52)}
+【noteフォーマット（厳守）】
+${fmt}
+
+${promptCta}
+
+${'═'.repeat(52)}
+【執筆ルール】
+${promptRules}`;
+
+  document.getElementById('out-pre').textContent=prompt;
+  document.getElementById('out-box').style.display='block';
+  document.getElementById('out-label').textContent=`プロンプト（${prompt.length.toLocaleString()}文字）`;
+  document.getElementById('posted-form').style.display='block';
+  document.getElementById('posted-title').value='';
+  document.getElementById('th-main').value=kw;
+  document.getElementById('th-sub').value=atype.split('（')[0];
+  document.getElementById('out-box').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function doCopy(){
+  navigator.clipboard.writeText(document.getElementById('out-pre').textContent).then(()=>{
+    const b=document.getElementById('copy-btn');
+    b.textContent='コピー済み ✓';b.classList.add('btn-green');
+    setTimeout(()=>{b.textContent='コピー';b.classList.remove('btn-green');},2500);
+  });
+}
+
+function markPosted(){
+  const title=document.getElementById('posted-title').value.trim();
+  const kw=document.getElementById('kw-input').value.trim();
+  if(!title){alert('タイトルを入力してください');return;}
+  published.push({title,kw});sv('pub4',published);renderAll();
+  document.getElementById('posted-form').style.display='none';
+  alert('✅ 投稿済みリストに追加しました！');
+}
+
+function quickPost(){
+  const title=document.getElementById('quick-title').value.trim();
+  const kw=document.getElementById('quick-kw').value.trim();
+  if(!title){alert('タイトルを入力してください');return;}
+  published.push({title,kw});sv('pub4',published);renderAll();
+  document.getElementById('quick-title').value='';document.getElementById('quick-kw').value='';
+  alert('✅ 追加しました！');
+}
+
+function p3Post(){
+  const title=document.getElementById('p3-title').value.trim();
+  const kw=document.getElementById('p3-kw').value.trim();
+  if(!title){alert('タイトルを入力してください');return;}
+  published.push({title,kw});sv('pub4',published);renderAll();
+  document.getElementById('p3-title').value='';document.getElementById('p3-kw').value='';
+  alert('✅ 追加しました！');
+}
+
+function deletePub(i){
+  if(!confirm(`「${published[i].title}」を削除しますか？`))return;
+  published.splice(i,1);sv('pub4',published);renderAll();
+}
+
+function toggleAcc(hdr){
+  const body=hdr.nextElementSibling, arr=hdr.querySelector('.acc-arr');
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  if(arr)arr.classList.toggle('open',!open);
+}
+
+function showStep(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>{p.classList.toggle('active',i===n);});
+  document.querySelectorAll('.flow-step').forEach((s,i)=>{s.classList.toggle('active',i===n);});
+  if(n===1)setTimeout(drawThumb,80);
+}
+
+// ── PROMPT SETTINGS ──
+function loadEditors(){
+  const get=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
+  get('edit-service',promptService);get('edit-cta',promptCta);get('edit-rules',promptRules);get('edit-format',promptFormat);
+  updateFormatPreview();
+}
+
+function updateFormatPreview(){
+  const ta=document.getElementById('edit-format');
+  const preview=document.getElementById('format-preview');
+  if(!ta||!preview)return;
+  const raw=ta.value||'';
+  // [タイトル] → サンプルタイトルに置換、[読了時間] → サンプル値に
+  const rendered=raw
+    .replace(/\[タイトル\]/g,'①楽器仕入れ完全ガイド')
+    .replace(/\[読了時間\]/g,'約7分');
+  // **太字** をハイライト、## 見出しを強調、--- を罫線として表示
+  const html=rendered
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--ink);">$1</strong>')
+    .replace(/^## (.+)$/gm,'<span style="font-size:14px;font-weight:700;color:var(--ink);">$1</span>')
+    .replace(/^---$/gm,'<span style="display:block;border-top:1px solid var(--border);margin:6px 0;"></span>');
+  preview.innerHTML=html;
+}
+function savePromptSettings(){
+  promptService=document.getElementById('edit-service').value;
+  promptCta=document.getElementById('edit-cta').value;
+  promptRules=document.getElementById('edit-rules').value;
+  sv('ps4',promptService);sv('pc4',promptCta);sv('pr4',promptRules);
+  const b=event.target;b.textContent='保存しました ✓';b.style.background='#111';
+  setTimeout(()=>{b.textContent='保存する';b.style.background='';},2000);
+}
+function resetPromptSettings(){
+  if(!confirm('初期値に戻しますか？'))return;
+  promptService=DEF_SERVICE;promptCta=DEF_CTA;promptRules=DEF_RULES;
+  sv('ps4',promptService);sv('pc4',promptCta);sv('pr4',promptRules);loadEditors();
+}
+function saveFormat(){
+  promptFormat=document.getElementById('edit-format').value;
+  sv('pf4',promptFormat);
+  const b=event.target;b.textContent='保存しました ✓';b.style.background='#111';
+  setTimeout(()=>{b.textContent='フォーマットを保存';b.style.background='';},2000);
+}
+function resetFormat(){
+  if(!confirm('フォーマットを初期値に戻しますか？'))return;
+  promptFormat=DEF_FORMAT;sv('pf4',promptFormat);loadEditors();
+}
+function resetAll(){
+  if(!confirm('全データをリセットしますか？'))return;
+  published=[...DEF_PUB];keywords=[...DEF_KW];
+  promptService=DEF_SERVICE;promptCta=DEF_CTA;promptRules=DEF_RULES;promptFormat=DEF_FORMAT;
+  sv('pub4',published);sv('kw4',keywords);sv('ps4',promptService);sv('pc4',promptCta);sv('pr4',promptRules);sv('pf4',promptFormat);
+  renderAll();loadEditors();alert('リセットしました');
+}
+
+// ── THUMBNAIL ──
+const COLOR_THEMES=[
+  {id:'teal',   label:'ブルー〜グリーン',c1:'#5dd6d0',c2:'#4fc3a1',b1:'#7ee8d8',b2:'#5ecfb0',bd:'#7de8e0',tx:'#1a2e44'},
+  {id:'sky',    label:'スカイ〜ミント',  c1:'#60c8f5',c2:'#3dcfb0',b1:'#80d8f8',b2:'#50dfc0',bd:'#70d8f5',tx:'#0d2d40'},
+  {id:'blue',   label:'ブルー〜パープル',c1:'#5b9ef5',c2:'#7b6cf5',b1:'#80b0f8',b2:'#9080f8',bd:'#7090f5',tx:'#1a1a50'},
+  {id:'purple', label:'パープル〜ピンク',c1:'#c06cf5',c2:'#f06090',b1:'#d080f8',b2:'#f080a8',bd:'#c878f0',tx:'#2a0a40'},
+  {id:'pink',   label:'ピンク〜コーラル',c1:'#f07090',c2:'#f09060',b1:'#f888a8',b2:'#f8a878',bd:'#f07898',tx:'#40100a'},
+  {id:'orange', label:'オレンジ〜イエロー',c1:'#f09030',c2:'#f5c830',b1:'#f8a840',b2:'#f8d840',bd:'#f0a830',tx:'#3a1a00'},
+  {id:'green',  label:'グリーン〜ティール',c1:'#40c860',c2:'#30b8a0',b1:'#58d878',b2:'#40c8b0',bd:'#48c878',tx:'#043020'},
+  {id:'red',    label:'レッド〜オレンジ',c1:'#f04040',c2:'#f07030',b1:'#f86060',b2:'#f89050',bd:'#f05050',tx:'#380808'},
+  {id:'rose',   label:'ローズ〜マゼンタ',c1:'#f04880',c2:'#d030c0',b1:'#f868a0',b2:'#e050d8',bd:'#e84898',tx:'#380030'},
+];
+
+// デザインパターン定義
+const DESIGNS=[
+  {id:'wave',   label:'ウェーブ',   desc:'波形（現行）'},
+  {id:'split',  label:'斜め分割',   desc:'対角ライン'},
+  {id:'circle', label:'サークル',   desc:'大きな円'},
+];
+let currentThemeId='teal', currentDesign='wave';
+
+function buildDesigns(){
+  const grid=document.getElementById('design-grid');
+  if(!grid)return;
+  grid.innerHTML=DESIGNS.map(d=>{
+    const T=COLOR_THEMES[0];
+    return `<div class="design-card${d.id===currentDesign?' selected':''}" onclick="selectDesign('${d.id}')">
+      <div class="design-preview" style="background:linear-gradient(135deg,${T.c1},${T.c2});">${d.label}</div>
+      <div class="design-label">${d.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectDesign(id){
+  currentDesign=id;
+  document.querySelectorAll('.design-card').forEach(c=>{
+    c.classList.toggle('selected',c.getAttribute('onclick').includes(`'${id}'`));
+  });
+  drawThumb();
+}
+
+function buildSwatches(){
+  const wrap=document.getElementById('th-swatches');
+  if(!wrap)return;
+  wrap.innerHTML=COLOR_THEMES.map(t=>`
+    <div class="swatch${t.id===currentThemeId?' selected':''}" id="sw-${t.id}"
+      onclick="selectTheme('${t.id}')"
+      title="${t.label}"
+      style="background:linear-gradient(135deg,${t.c1},${t.c2});"></div>
+  `).join('');
+}
+
+function selectTheme(id){
+  currentThemeId=id;
+  document.querySelectorAll('.swatch').forEach(s=>{s.classList.toggle('selected',s.id===`sw-${id}`);});
+  buildDesigns();drawThumb();
+}
+
+function drawThumb(){
+  const canvas=document.getElementById('thumb-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=1920,H=1006;
+  canvas.width=W;canvas.height=H;
+
+  const T=COLOR_THEMES.find(t=>t.id===currentThemeId)||COLOR_THEMES[0];
+  const mainRaw=(document.getElementById('th-main')||{value:''}).value||'記事タイトル';
+  const subTxt=(document.getElementById('th-sub')||{value:''}).value||'';
+  const brand=(document.getElementById('th-brand')||{value:''}).value||'ブランド名';
+
+  // 白背景
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
+
+  if(currentDesign==='wave'){
+    drawWaves(ctx,W,H,T);
+  } else if(currentDesign==='split'){
+    drawSplit(ctx,W,H,T);
+  } else if(currentDesign==='circle'){
+    drawCircle(ctx,W,H,T);
+  }
+
+  // ボーダー枠
+  ctx.save();ctx.strokeStyle=T.bd+'99';ctx.lineWidth=3;
+  const m=52,br=60;ctx.beginPath();
+  ctx.moveTo(m+br,m);ctx.lineTo(W-m-br,m);ctx.arcTo(W-m,m,W-m,m+br,br);
+  ctx.lineTo(W-m,H-m-br);ctx.arcTo(W-m,H-m,W-m-br,H-m,br);
+  ctx.lineTo(m+br,H-m);ctx.arcTo(m,H-m,m,H-m-br,br);
+  ctx.lineTo(m,m+br);ctx.arcTo(m,m,m+br,m,br);
+  ctx.closePath();ctx.stroke();ctx.restore();
+
+  // 装飾
+  drawDeco(ctx,W,H,T);
+
+  // テキスト
+  drawText(ctx,W,H,T,mainRaw,subTxt,brand);
+
+  canvas.style.width='100%';canvas.style.height='auto';
+}
+
+function drawWaves(ctx,W,H,T){
+  function waveBottom(bY,wH,freq,phase,color,alpha){
+    ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=color;ctx.beginPath();
+    ctx.moveTo(-10,H+10);ctx.lineTo(-10,bY);
+    for(let i=0;i<=400;i++){
+      const x=(i/400)*W,t=(i/400)*Math.PI*2;
+      const y=bY-wH*0.55*Math.sin(t*freq+phase)-wH*0.28*Math.sin(t*freq*1.7+phase*1.3)-wH*0.17*Math.sin(t*freq*2.3+phase*0.7);
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W+10,H+10);ctx.closePath();ctx.fill();ctx.restore();
+  }
+  function waveTop(bY,wH,freq,phase,color,alpha){
+    ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=color;ctx.beginPath();
+    ctx.moveTo(-10,-10);ctx.lineTo(-10,bY);
+    for(let i=0;i<=400;i++){
+      const x=(i/400)*W,t=(i/400)*Math.PI*2;
+      const y=bY+wH*0.55*Math.sin(t*freq+phase)+wH*0.28*Math.sin(t*freq*1.9+phase*1.2)+wH*0.17*Math.sin(t*freq*2.5+phase*0.8);
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W+10,-10);ctx.closePath();ctx.fill();ctx.restore();
+  }
+  waveBottom(H*.88,H*.12,1.4,0.0,T.b1,.50);
+  waveBottom(H*.92,H*.10,1.2,1.1,T.c1,.65);
+  waveBottom(H*.96,H*.11,1.6,2.3,T.c2,.80);
+  waveTop(H*.12,H*.10,1.3,3.2,T.b2,.45);
+  waveTop(H*.08,H*.09,1.5,1.8,T.c1,.60);
+  waveTop(H*.04,H*.10,1.1,0.5,T.c2,.75);
+}
+
+function drawSplit(ctx,W,H,T){
+  // 左下の斜め三角 — 控えめな比率に（全体の約25%）
+  ctx.save();
+  const g1=ctx.createLinearGradient(0,H,W*.4,H*.5);
+  g1.addColorStop(0,T.c1+'cc');g1.addColorStop(1,T.c2+'88');
+  ctx.fillStyle=g1;ctx.globalAlpha=.9;
+  ctx.beginPath();ctx.moveTo(0,H);ctx.lineTo(W*.42,H);ctx.lineTo(0,H*.52);ctx.closePath();ctx.fill();
+  ctx.restore();
+  // 右上の小三角 — 控えめに
+  ctx.save();
+  const g2=ctx.createLinearGradient(W,0,W*.72,H*.32);
+  g2.addColorStop(0,T.c2+'bb');g2.addColorStop(1,T.c1+'66');
+  ctx.fillStyle=g2;ctx.globalAlpha=.75;
+  ctx.beginPath();ctx.moveTo(W,0);ctx.lineTo(W*.68,0);ctx.lineTo(W,H*.36);ctx.closePath();ctx.fill();
+  ctx.restore();
+  // 斜めライン（細め）
+  ctx.save();ctx.strokeStyle=T.c1+'44';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(0,H*.52);ctx.lineTo(W*.42,H);ctx.stroke();
+  ctx.restore();
+}
+
+function drawCircle(ctx,W,H,T){
+  // 左下のほんわりグラデーション円（大きめ・中心消える）
+  ctx.save();
+  const g1=ctx.createRadialGradient(W*.05,H*.92,0,W*.05,H*.92,520);
+  g1.addColorStop(0,T.c1+'cc');g1.addColorStop(.45,T.c2+'66');g1.addColorStop(1,T.c1+'00');
+  ctx.fillStyle=g1;ctx.beginPath();ctx.arc(W*.05,H*.92,520,0,Math.PI*2);ctx.fill();ctx.restore();
+  // 右上のほんわり円
+  ctx.save();
+  const g2=ctx.createRadialGradient(W*.94,H*.08,0,W*.94,H*.08,400);
+  g2.addColorStop(0,T.c2+'bb');g2.addColorStop(.4,T.c1+'55');g2.addColorStop(1,T.c2+'00');
+  ctx.fillStyle=g2;ctx.beginPath();ctx.arc(W*.94,H*.08,400,0,Math.PI*2);ctx.fill();ctx.restore();
+  // 中心の輪郭円は削除
+}
+
+function drawDeco(ctx,W,H,T){
+  const al='55', lw=2.5;
+  const dr=(x,y,r,c)=>{ctx.save();ctx.strokeStyle=c+al;ctx.lineWidth=lw;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();ctx.restore();};
+  const dp=(x,y,s,c)=>{ctx.save();ctx.strokeStyle=c+al;ctx.lineWidth=lw;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x-s,y);ctx.lineTo(x+s,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y-s);ctx.lineTo(x,y+s);ctx.stroke();ctx.restore();};
+  const dd=(x,y,s,c)=>{ctx.save();ctx.strokeStyle=c+al;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(x,y-s);ctx.lineTo(x+s,y);ctx.lineTo(x,y+s);ctx.lineTo(x-s,y);ctx.closePath();ctx.stroke();ctx.restore();};
+  dr(W*.10,H*.12,38,T.c1);dr(W*.07,H*.22,20,T.c2);dp(W*.18,H*.17,16,T.c1);dd(W*.05,H*.35,14,T.c1);
+  dr(W*.04,H*.48,26,T.c1);dr(W*.85,H*.08,32,T.c2);dd(W*.95,H*.28,16,T.c1);dp(W*.78,H*.14,14,T.c2);
+  dr(W*.88,H*.32,24,T.c1);dd(W*.06,H*.72,18,T.c1);dr(W*.18,H*.88,28,T.c2);dp(W*.14,H*.94,18,T.c1);
+  dr(W*.88,H*.78,36,T.c1);dr(W*.94,H*.88,22,T.c2);dp(W*.92,H*.70,20,T.c1);dd(W*.82,H*.86,15,T.c2);
+  dp(W*.5,H*.06,14,T.c1);dd(W*.5,H*.92,12,T.c2);
+}
+
+function drawText(ctx,W,H,T,mainRaw,subTxt,brand){
+  const lines=mainRaw.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(l=>l.trim()!=='');
+  const charMax=Math.max(...lines.map(l=>l.length));
+  const mfs=charMax>16?82:charMax>10?96:110;
+  const sfs=56, bfs=36, lh=mfs*1.38, sg=56;
+  const totalH=lines.length*lh+(subTxt.trim()?sfs+sg+20:0);
+  let ty=H/2-totalH/2;
+  ctx.save();ctx.textAlign='center';ctx.fillStyle=T.tx;
+  ctx.font=`900 ${mfs}px "Noto Sans JP",sans-serif`;
+  for(const line of lines){ctx.fillText(line.trim(),W/2,ty+mfs);ty+=lh;}
+  if(subTxt.trim()){
+    ty+=sg;ctx.font=`500 ${sfs}px "Noto Sans JP",sans-serif`;ctx.fillStyle=T.tx+'99';
+    ctx.fillText(subTxt.trim(),W/2,ty+sfs);
+  }
+  ctx.restore();
+  // バー
+  const barH=80;
+  for(let x=0;x<W;x++){
+    const t2=x/W,r=Math.round(parseInt(T.c1.slice(1,3),16)*(1-t2)+parseInt(T.c2.slice(1,3),16)*t2);
+    const g2=Math.round(parseInt(T.c1.slice(3,5),16)*(1-t2)+parseInt(T.c2.slice(3,5),16)*t2);
+    const b2=Math.round(parseInt(T.c1.slice(5,7),16)*(1-t2)+parseInt(T.c2.slice(5,7),16)*t2);
+    for(let y=H-barH;y<H;y++)ctx.fillStyle=`rgb(${r},${g2},${b2})`,ctx.fillRect(x,y,1,1);
+  }
+  ctx.save();
+  try{
+    const FONT_BLACK='/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc';
+    ctx.font=`bold ${bfs}px "Noto Sans JP",sans-serif`;
+  }catch{}
+  ctx.font=`bold ${bfs}px "Noto Sans JP",sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='rgba(255,255,255,.95)';
+  ctx.fillText(brand,W/2,H-barH/2);ctx.restore();
+}
+
+['th-main','th-sub','th-brand'].forEach(id=>{
+  const e=document.getElementById(id);
+  if(e){e.addEventListener('input',drawThumb);e.addEventListener('keyup',drawThumb);}
+});
+
+function downloadThumb(){
+  drawThumb();
+  setTimeout(()=>{
+    const c=document.getElementById('thumb-canvas');
+    const a=document.createElement('a');
+    a.download=`note_thumbnail_${Date.now()}.png`;
+    a.href=c.toDataURL('image/png');
+    a.style.display='none';
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>document.body.removeChild(a),200);
+  },100);
+}
+
+init();
+</script>
+</body>
+</html>
