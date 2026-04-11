@@ -2032,7 +2032,16 @@
 
   // スクロール位置の自動復元を無効化（リダイレクト後の誤復元防止）
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  // smooth scroll を一時的に切ってから即座にトップへ（SPのSafari対策）
+  document.documentElement.style.scrollBehavior = 'auto';
   window.scrollTo(0, 0);
+  document.addEventListener('DOMContentLoaded', function() {
+    window.scrollTo(0, 0);
+    setTimeout(function() {
+      window.scrollTo(0, 0);
+      document.documentElement.style.scrollBehavior = '';
+    }, 100);
+  });
 
   // ===== Scroll fade-in =====
   const obs = new IntersectionObserver(entries => {
