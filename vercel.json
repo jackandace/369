@@ -1,6 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/youme", "destination": "/youme/index.html" },
-    { "source": "/youme/(.*)", "destination": "/youme/index.html" }
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/youme/youme_newborn_revised.html",
+      "permanent": false
+    }
   ]
 }
