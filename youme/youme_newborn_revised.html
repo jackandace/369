@@ -2102,7 +2102,11 @@
         const i = parseInt(tag.dataset.target, 10);
         const card = cards[i];
         if (!card) return;
-        slider.parentElement.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+        const wrap = slider.parentElement;
+        const wrapRect = wrap.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const scrollLeft = wrap.scrollLeft + (cardRect.left - wrapRect.left);
+        wrap.scrollTo({ left: scrollLeft, behavior: 'smooth' });
         // タグのアクティブ切替
         tags.forEach(function(t){ t.classList.remove('active'); });
         tag.classList.add('active');
