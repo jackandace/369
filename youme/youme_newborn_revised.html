@@ -39,6 +39,7 @@
     a { text-decoration: none; color: inherit; }
 
 
+    .logo, a.logo { text-decoration: none; }
     .logo {
       font-family: 'Cormorant Garamond', serif;
       font-size: 19px;
@@ -1231,7 +1232,7 @@
 
 <!-- Header -->
 <header>
-  <div class="logo">You&amp;Me <em>newbornphoto</em></div>
+  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">You&amp;Me <em>newbornphoto</em></a>
   <div class="menu-btn" onclick="openMenu()">
     <div class="menu-line"></div>
     <div class="menu-line"></div>
@@ -1999,7 +2000,7 @@
 
 <!-- Mobile Bottom CTA -->
 <div class="mob-cta">
-  <a href="#finalcta">
+  <a href="#finalcta" onclick="var el=document.getElementById('finalcta');if(el){el.scrollIntoView({behavior:'smooth'});return false;}">
     お問い合わせはこちら
   </a>
 </div>
