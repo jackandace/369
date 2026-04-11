@@ -2030,6 +2030,10 @@
     }
   }
 
+  // スクロール位置の自動復元を無効化（リダイレクト後の誤復元防止）
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
   // ===== Scroll fade-in =====
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
