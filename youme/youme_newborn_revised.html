@@ -3,7 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You&Me newbornphoto | 岐阜・愛知 出張ニューボーンフォト撮影</title>
+  <title>岐阜・愛知のニューボーンフォト出張撮影｜You&Me newbornphoto</title>
+
+  <!-- SEO / AEO -->
+  <meta name="description" content="岐阜・愛知・名古屋エリアのニューボーンフォト出張撮影。生後5〜14日の新生児期に、ご自宅で安全・丁寧に撮影します。チンオンハンズ・シフォンなど多彩なポーズに対応。岐阜・愛知県内は無料出張。LINEでお気軽にご相談ください。">
+  <meta name="keywords" content="ニューボーンフォト,岐阜,愛知,名古屋,出張撮影,新生児写真,ニューボーン撮影,生後28日,赤ちゃん写真,マタニティフォト,自宅撮影,赤ちゃん撮影">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://youandme-newborn.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="岐阜・愛知のニューボーンフォト出張撮影｜You&Me newbornphoto">
+  <meta property="og:description" content="岐阜・愛知・名古屋エリアのニューボーンフォト出張撮影。生後5〜14日の赤ちゃんをご自宅で安全に撮影。岐阜・愛知県内は無料出張対応。">
+  <meta property="og:url" content="https://youandme-newborn.com/">
+  <meta property="og:site_name" content="You&Me newbornphoto">
+  <meta property="og:locale" content="ja_JP">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="岐阜・愛知のニューボーンフォト出張撮影｜You&Me newbornphoto">
+  <meta name="twitter:description" content="岐阜・愛知・名古屋エリアのニューボーンフォト出張撮影。生後5〜14日の赤ちゃんをご自宅で安全に撮影。">
+
+  <!-- JSON-LD Structured Data (AEO・ローカル検索対応) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "You&Me newbornphoto",
+    "description": "岐阜・愛知・名古屋エリアを中心に出張でニューボーンフォト撮影を行うフォトグラファー。生後5〜14日の新生児期に、ご自宅やスタジオで安全・丁寧に撮影します。",
+    "url": "https://youandme-newborn.com/",
+    "telephone": "",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "岐阜県",
+      "addressCountry": "JP"
+    },
+    "areaServed": [
+      { "@type": "State", "name": "岐阜県" },
+      { "@type": "State", "name": "愛知県" }
+    ],
+    "serviceType": "ニューボーンフォト出張撮影",
+    "priceRange": "¥¥",
+    "sameAs": []
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "岐阜でニューボーンフォトの出張撮影をしてもらえますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、岐阜県全域に無料で出張撮影に伺います。自宅撮影が基本で、赤ちゃんに安心な環境で撮影します。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "愛知・名古屋でニューボーンフォトは撮れますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい、愛知県全域に出張撮影対応しています。名古屋市内はもちろん、愛知県内であれば無料でお伺いします。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "何日以内の赤ちゃんが対象ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "生後5〜14日が撮影のベストな時期です。この時期は赤ちゃんがよく眠り、ポーズがとりやすい時期です。"
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
@@ -2106,12 +2182,12 @@
         const wrapRect = wrap.getBoundingClientRect();
         const cardRect = card.getBoundingClientRect();
         const scrollLeft = wrap.scrollLeft + (cardRect.left - wrapRect.left);
-        wrap.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-        // タグのアクティブ切替
+        // タグのアクティブ切替（先に行う）
         tags.forEach(function(t){ t.classList.remove('active'); });
         tag.classList.add('active');
-        // インデックスのタグ自身もスクロールして見えるようにする
-        tag.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+        // iOS SafariはscrollTo smoothに非対応のため直接代入
+        // ※ tag.scrollIntoViewを後で呼ぶとscrollLeftが上書きされるため削除
+        wrap.scrollLeft = scrollLeft;
       });
     });
 
