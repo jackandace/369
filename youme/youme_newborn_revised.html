@@ -1365,8 +1365,8 @@
     <div class="sec-ja">撮影プラン・料金</div>
   </div>
   <p class="plan-lead fi">
-    全プラン、岐阜・愛知エリアへの出張撮影込みです。<br>
-    ご不明な点や空き状況は、お気軽にお問い合わせください。
+    岐阜・愛知エリア無料出張範囲あり。<br>
+    空き状況や出張費、ご不明な点はお気軽にお問い合わせください。
   </p>
 
   <!-- 3プランカード -->
@@ -1533,7 +1533,7 @@
         <ul class="plan-items">
           <li>レタッチデータ 50枚納品</li>
           <li>撮影時間 1.5〜2時間（準備〜片付け）</li>
-          <li>撮影場所 お客様ご自宅</li>
+          <li>撮影場所 お客様ご自宅 or おうちスタジオ</li>
           <li>衣装 2着までお着換え可（ご自身でご準備ください）</li>
         </ul>
         <a href="#finalcta" class="btn-main" style="margin-top:8px; display:inline-flex;">
@@ -2088,7 +2088,7 @@
         const i = parseInt(tag.dataset.target, 10);
         const card = cards[i];
         if (!card) return;
-        slider.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+        slider.parentElement.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
         // タグのアクティブ切替
         tags.forEach(function(t){ t.classList.remove('active'); });
         tag.classList.add('active');
