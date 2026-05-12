@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リッチメニュー構成案</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #ffffff;
+    --paper-2: #f5f5f5;
+    --accent: #c8442e;
+    --teal: #1d5e6e;
+    --mustard: #b88a2a;
+    --gray-1: #666;
+    --gray-2: #999;
+    --line: #e0e0e0;
+    --line-green: #06c755;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', Meiryo, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 40px 32px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .header .eyebrow {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .header .meta {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-top: 8px;
+  }
+
+  /* Spec block */
+  .spec-section {
+    background: var(--paper-2);
+    padding: 20px 24px;
+    margin-bottom: 40px;
+    border-left: 3px solid var(--accent);
+  }
+  .spec-section h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .spec-item {
+    background: white;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+  }
+  .spec-item .spec-label {
+    font-size: 11px;
+    color: var(--gray-1);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .spec-item .spec-val {
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  /* Section */
+  .section { margin-bottom: 56px; }
+  .section-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-num {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-lead {
+    background: var(--paper-2);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .section-lead strong { color: var(--accent); font-weight: 700; }
+
+  /* Layout: wire + info side by side */
+  .pattern-body {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  /* LINE mockup container */
+  .line-mockup {
+    background: #eef0f4;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .line-mockup .mock-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 4px;
+    margin-bottom: 8px;
+  }
+  .line-mockup .mock-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f4a04c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 1px solid white;
+  }
+  .line-mockup .mock-account-name {
+    font-size: 11px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .line-mockup .mock-area {
+    background: #d6dae0;
+    height: 80px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-1);
+    font-size: 11px;
+  }
+  .line-mockup .mock-input {
+    background: white;
+    padding: 6px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    color: var(--gray-2);
+    margin-bottom: 8px;
+  }
+
+  /* Rich menu wire */
+  .rich-wire {
+    background: white;
+    border: 2px solid var(--ink);
+    overflow: hidden;
+  }
+  .rich-wire.large {
+    aspect-ratio: 2500 / 1686;
+  }
+  .rich-wire.small {
+    aspect-ratio: 2500 / 843;
+  }
+  .rich-wire .cell {
+    border: 1px solid var(--line);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.3;
+    background: white;
+    overflow: hidden;
+  }
+  .rich-wire .cell .cell-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .rich-wire .cell .cell-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .rich-wire .cell .cell-sub {
+    font-size: 9px;
+    color: var(--gray-1);
+    margin-top: 2px;
+  }
+  .rich-wire .cell.primary { background: var(--accent); color: white; }
+  .rich-wire .cell.primary .cell-label,
+  .rich-wire .cell.primary .cell-sub { color: white; }
+  .rich-wire .cell.primary .cell-sub { color: rgba(255,255,255,0.85); }
+  .rich-wire .cell.secondary { background: var(--paper-2); }
+  .rich-wire .cell.full-hero {
+    background: var(--accent);
+    color: white;
+    height: 100%;
+    padding: 20px;
+  }
+  .rich-wire .cell.full-hero .cell-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+  .rich-wire .cell.full-hero .cell-label {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .rich-wire .cell.full-hero .cell-sub {
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+  }
+  .rich-wire .cell.bigger .cell-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  .rich-wire .cell.bigger .cell-label {
+    font-size: 13px;
+  }
+
+  /* Tab indicator (for C plan) */
+  .tab-row {
+    display: flex;
+    background: #2a2a2a;
+    color: white;
+    font-size: 10px;
+  }
+  .tab-row .tab-item {
+    flex: 1;
+    padding: 7px 4px;
+    text-align: center;
+    border-right: 1px solid #555;
+  }
+  .tab-row .tab-item:last-child { border-right: none; }
+  .tab-row .tab-item.active {
+    background: var(--accent);
+    font-weight: 700;
+  }
+
+  /* Stamp grid */
+  .stamp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    padding: 8px;
+    background: var(--paper-2);
+    height: 100%;
+  }
+  .stamp-cell {
+    background: white;
+    border: 1px dashed var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--gray-2);
+    position: relative;
+  }
+  .stamp-cell.stamped {
+    background: var(--accent);
+    color: white;
+    border-style: solid;
+    border-color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .stamp-cell.today {
+    background: white;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .stamp-cell.goal {
+    background: var(--mustard);
+    color: white;
+    border-color: var(--mustard);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  /* Grid patterns */
+  .grid-1x1 {
+    height: 100%;
+  }
+  /* 2:1 ratio = 2/3 + 1/3 */
+  .grid-2-1 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0;
+    height: 100%;
+  }
+
+  /* Info side */
+  .pattern-info .info-block {
+    margin-bottom: 16px;
+  }
+  .pattern-info .info-block:last-child { margin-bottom: 0; }
+  .pattern-info .info-label {
+    font-size: 11px;
+    color: var(--gray-1);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pattern-info .info-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .pattern-info .info-list {
+    list-style: none;
+  }
+  .pattern-info .info-list li {
+    padding: 2px 0;
+    padding-left: 12px;
+    position: relative;
+    font-size: 12px;
+    color: var(--gray-1);
+  }
+  .pattern-info .info-list li::before {
+    content: '・';
+    position: absolute;
+    left: 0;
+  }
+
+  /* Action mapping table */
+  .action-table {
+    background: white;
+    border: 1px solid var(--line);
+    margin-top: 16px;
+    overflow: hidden;
+  }
+  .action-table .at-head {
+    background: var(--paper-2);
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--line);
+  }
+  .action-table .at-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+    align-items: center;
+  }
+  .action-table .at-row:last-child { border-bottom: none; }
+  .action-table .at-row .at-id {
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .action-table .at-row .at-label {
+    font-weight: 500;
+  }
+  .action-table .at-row .at-action {
+    color: var(--gray-1);
+    font-size: 11px;
+  }
+
+  /* Compare table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 12px;
+  }
+  .compare-table th, .compare-table td {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .compare-table th {
+    background: var(--paper-2);
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .compare-table td .check { color: var(--accent); font-weight: 700; }
+
+  /* Recommendation */
+  .recommend-box {
+    background: var(--ink);
+    color: white;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .recommend-box h3 {
+    font-size: 14px;
+    color: var(--mustard);
+    margin-bottom: 8px;
+  }
+  .recommend-box p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* Notes */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .note-card {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 18px;
+  }
+  .note-card .note-label {
+    font-size: 11px;
+    color: var(--gray-1);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .note-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .note-card p {
+    font-size: 12px;
+    color: var(--gray-1);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    body { padding: 24px 16px; }
+    .spec-grid, .notes-grid { grid-template-columns: 1fr; }
+    .pattern-body { grid-template-columns: 1fr; }
+    .action-table .at-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">リッチメニュー構成案</div>
+    <h1>リッチメニュー ワイヤーフレーム3案</h1>
+    <div class="meta">クライアント: MEGA柴 / 2026.05 / v1.2</div>
+  </header>
+
+  <!-- Spec section -->
+  <section class="spec-section">
+    <h2>リッチメニュー基本仕様</h2>
+    <div class="spec-grid">
+      <div class="spec-item">
+        <div class="spec-label">推奨サイズ（大）</div>
+        <div class="spec-val">2,500 × 1,686 px</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">推奨サイズ（小）</div>
+        <div class="spec-val">2,500 × 843 px</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">ファイル仕様</div>
+        <div class="spec-val">JPG / PNG / 1MB以内</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">大の分割数</div>
+        <div class="spec-val">最大6分割</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">小の分割数</div>
+        <div class="spec-val">最大3分割</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">タブ切り替え</div>
+        <div class="spec-val">エルステで実現可</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern A -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">A</div>
+      <h2>案A：アンケート専用（ローンチ初期限定）</h2>
+    </div>
+    <div class="section-lead">
+      アンケート未回答者向け。<strong>他のボタンは一切配置せず、画面全面でアンケート回答のみを訴求</strong>。回答率を最大化するため、寄り道を完全に排除する。完了タグが付いた瞬間に案Bに自動切り替え。
+    </div>
+
+    <div class="pattern-body">
+      <div class="line-mockup">
+        <div class="mock-header">
+          <div class="mock-avatar">🐶</div>
+          <div class="mock-account-name">MEGA柴公式</div>
+        </div>
+        <div class="mock-area">トーク履歴エリア</div>
+        <div class="mock-input">メッセージを入力</div>
+        <div class="rich-wire large">
+          <div class="grid-1x1">
+            <div class="cell full-hero">
+              <div class="cell-icon">🎯</div>
+              <div class="cell-label">3問のアンケートに回答する</div>
+              <div class="cell-sub">ビンゴ参加権 / クーポンGET</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern-info">
+        <div class="info-block">
+          <div class="info-label">表示対象</div>
+          <div class="info-text">「アンケート未完了」タグ保有者のみ。完了タグが付いた瞬間に案Bへ自動切り替え。</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">設計意図</div>
+          <ul class="info-list">
+            <li>選択肢を1つに絞り、確実にアンケートまで到達させる</li>
+            <li>SNSや公式サイトへの脇道を作らない（離脱抑止）</li>
+            <li>あいさつメッセを見逃した人でも、トーク画面を開く度にアンケートが目に入る</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <div class="info-label">想定運用期間</div>
+          <div class="info-text">アンケート未完了タグが残っている間。完了率が一定水準に達した段階で案B切替対象を拡大。</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">サイズ</div>
+          <div class="info-text">大サイズ（2,500 × 1,686 px）/ 1ボタン全面</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-table">
+      <div class="at-head">ボタンアクション割当</div>
+      <div class="at-row">
+        <div class="at-id">A-01</div>
+        <div class="at-label">🎯 3問のアンケートに回答する</div>
+        <div class="at-action">URL遷移：エルステ回答フォーム</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern B -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">B</div>
+      <h2>案B：基本メニュー（恒常運用）</h2>
+    </div>
+    <div class="section-lead">
+      アンケート完了後・通常運用時のデフォルトメニュー。<strong>公式サイト誘導を2:1で大きく配置</strong>し、サイト送客を最優先。Xはサブ的に配置。ライブ配信は不定期のため恒常メニューに含めず、開催時のみリッチメッセージで都度告知する運用とする。
+    </div>
+
+    <div class="pattern-body">
+      <div class="line-mockup">
+        <div class="mock-header">
+          <div class="mock-avatar">🐶</div>
+          <div class="mock-account-name">MEGA柴公式</div>
+        </div>
+        <div class="mock-area">トーク履歴エリア</div>
+        <div class="mock-input">メッセージを入力</div>
+        <div class="rich-wire small">
+          <div class="grid-2-1">
+            <div class="cell primary bigger">
+              <div class="cell-icon">🌐</div>
+              <div class="cell-label">公式サイト</div>
+              <div class="cell-sub">ガチャを引く</div>
+            </div>
+            <div class="cell secondary">
+              <div class="cell-icon">📱</div>
+              <div class="cell-label">X</div>
+              <div class="cell-sub">最新情報</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern-info">
+        <div class="info-block">
+          <div class="info-label">表示対象</div>
+          <div class="info-text">「アンケート完了」タグ保有者全員。デフォルトメニュー。</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">設計意図</div>
+          <ul class="info-list">
+            <li>公式サイト：X = 2:1の比率でサイト誘導を最優先に視認化</li>
+            <li>サイト送客が最重要KPIなのでファーストタップを誘導</li>
+            <li>ライブ配信は不定期のため、開催時のみリッチメッセージで都度告知する運用</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <div class="info-label">想定運用期間</div>
+          <div class="info-text">恒常運用。キャンペーン期間中は案Cに一時切り替え。</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">サイズ</div>
+          <div class="info-text">小サイズ（2,500 × 843 px）/ 2分割（2:1比率）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-table">
+      <div class="at-head">ボタンアクション割当</div>
+      <div class="at-row">
+        <div class="at-id">B-01</div>
+        <div class="at-label">🌐 公式サイト（大）</div>
+        <div class="at-action">URL遷移：MEGA柴公式サイト（utm計測パラメータ付与）</div>
+      </div>
+      <div class="at-row">
+        <div class="at-id">B-02</div>
+        <div class="at-label">📱 X</div>
+        <div class="at-action">URL遷移：X公式アカウント</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern C -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">C</div>
+      <h2>案C：スタンプラリー型（毎日ログイン施策・タブ切り替え）</h2>
+    </div>
+    <div class="section-lead">
+      <strong>「WEBサイトでは誘導できない人をLINE側でリフトアップする」</strong>のが核となる目的。スタンプラリー形式で毎日LINEを開く動機を作り、休眠化を防ぐ。サイト送客が目的ではなく、<strong>LINE上のエンゲージメント維持</strong>が主目的。タブ切替で基本メニューも併存させる。
+    </div>
+
+    <div class="pattern-body">
+      <div class="line-mockup">
+        <div class="mock-header">
+          <div class="mock-avatar">🐶</div>
+          <div class="mock-account-name">MEGA柴公式</div>
+        </div>
+        <div class="mock-area">トーク履歴エリア</div>
+        <div class="mock-input">メッセージを入力</div>
+        <div class="rich-wire large">
+          <div class="tab-row">
+            <div class="tab-item active">🎁 スタンプラリー</div>
+            <div class="tab-item">🌐 メニュー</div>
+          </div>
+          <div class="stamp-grid" style="height: calc(100% - 28px);">
+            <div class="stamp-cell stamped">🐾</div>
+            <div class="stamp-cell stamped">🐾</div>
+            <div class="stamp-cell stamped">🐾</div>
+            <div class="stamp-cell today">今日</div>
+            <div class="stamp-cell">Day5</div>
+            <div class="stamp-cell">Day6</div>
+            <div class="stamp-cell">Day7</div>
+            <div class="stamp-cell goal">🎁</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern-info">
+        <div class="info-block">
+          <div class="info-label">表示対象</div>
+          <div class="info-text">キャンペーン期間中の「アンケート完了」タグ保有者全員。期間終了で案Bに自動戻し。</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">設計意図</div>
+          <ul class="info-list">
+            <li>スタンプラリーをデフォルトタブに配置し、毎日タップ動機を作る</li>
+            <li>進捗の可視化で離脱を防ぐ（あと何日でゴールが見える）</li>
+            <li>もう一つのタブで案B相当の基本メニュー（公式サイト / X）にアクセス可能</li>
+            <li>キャンペーン非関心層もサイト送客の経路は確保</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <div class="info-label">実装方式</div>
+          <ul class="info-list">
+            <li>エルステのタブ切替機能を使用</li>
+            <li>2枚のリッチメニュー（スタンプラリー版・メニュー版）を用意</li>
+            <li>タブ位置のタップで別リッチメニューへ遷移</li>
+            <li>スタンプ画像は日次で差し替え（進捗反映）</li>
+          </ul>
+        </div>
+        <div class="info-block">
+          <div class="info-label">サイズ</div>
+          <div class="info-text">大サイズ（2,500 × 1,686 px）/ タブ + 8マス（4×2）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-table">
+      <div class="at-head">ボタンアクション割当（スタンプラリータブ）</div>
+      <div class="at-row">
+        <div class="at-id">C-01</div>
+        <div class="at-label">🎁 スタンプラリータブ</div>
+        <div class="at-action">現在表示中（アクションなし）</div>
+      </div>
+      <div class="at-row">
+        <div class="at-id">C-02</div>
+        <div class="at-label">🌐 メニュータブ</div>
+        <div class="at-action">案B相当のリッチメニューに切替</div>
+      </div>
+      <div class="at-row">
+        <div class="at-id">C-03</div>
+        <div class="at-label">🐾 今日のスタンプマス</div>
+        <div class="at-action">テキスト返信「今日のスタンプ獲得！」+ 連続日数タグ更新</div>
+      </div>
+      <div class="at-row">
+        <div class="at-id">C-04</div>
+        <div class="at-label">🎁 ゴール景品マス</div>
+        <div class="at-action">7日達成後にタップ可能化 → 景品受取案内へ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Switching strategy -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>出し分け戦略（タグベース）</h2>
+    </div>
+    <div class="section-lead">
+      3案は<strong>同時並列ではなく時系列で切り替える</strong>。タグ状態で自動出し分けすることで、ユーザーの状況に最適なメニューが常に表示される。
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>フェーズ</th>
+          <th>対象タグ条件</th>
+          <th>表示メニュー</th>
+          <th>切り替えトリガー</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>初期</td>
+          <td>アンケート未完了</td>
+          <td><span class="check">案A</span> アンケート専用</td>
+          <td>友だち追加直後から</td>
+        </tr>
+        <tr>
+          <td>通常</td>
+          <td>アンケート完了 AND キャンペーン期間外</td>
+          <td><span class="check">案B</span> 基本メニュー</td>
+          <td>アンケート完了タグ付与時に自動切替</td>
+        </tr>
+        <tr>
+          <td>キャンペーン</td>
+          <td>アンケート完了 AND キャンペーン期間中</td>
+          <td><span class="check">案C</span> スタンプラリー（タブ切替）</td>
+          <td>キャンペーン開始日 / 終了日で手動切替</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="recommend-box">
+      <h3>運用推奨</h3>
+      <p>ローンチ時は案A + 案Bの2枚をまず実装。案Cは初回キャンペーンの設計（景品・開催期間・連続日数のルール）が固まってから後追いで追加するのが現実的。3案を同時に立ち上げると運用負荷が高く、効果検証も曖昧になる。</p>
+    </div>
+  </section>
+
+  <!-- Notes -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>実装上の注意点</h2>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card">
+        <div class="note-label">注意 01</div>
+        <h3>タップ領域の確保</h3>
+        <p>案Cのスタンプラリーは8マスとマス目が細かい。タップ領域の最小サイズは縦300px程度を確保。タップミスを防ぐため余白も入れる。</p>
+      </div>
+      <div class="note-card">
+        <div class="note-label">注意 02</div>
+        <h3>アクションラベル設定</h3>
+        <p>各ボタンに最大20文字のアクションラベルを設定。OSの音声読み上げで使われ、アクセシビリティ対応となる。</p>
+      </div>
+      <div class="note-card">
+        <div class="note-label">注意 03</div>
+        <h3>スタンプ画像の差し替え</h3>
+        <p>案Cは日次でスタンプ進捗を反映した画像に差し替える必要あり。エルステの自動差し替え機能 or 手動運用のいずれかを選定。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
