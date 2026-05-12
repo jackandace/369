@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE構築 MVP設計</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #ffffff;
+    --paper-2: #f5f5f5;
+    --accent: #c8442e;
+    --teal: #1d5e6e;
+    --mustard: #b88a2a;
+    --gray-1: #666;
+    --gray-2: #999;
+    --line: #e0e0e0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', Meiryo, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 40px 32px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .header .eyebrow {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .header .meta {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-top: 8px;
+  }
+
+  .section { margin-bottom: 48px; }
+  .section-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-num {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-lead {
+    background: var(--paper-2);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .section-lead strong { color: var(--accent); font-weight: 700; }
+
+  /* Goal grid */
+  .goal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .goal-card {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 18px;
+  }
+  .goal-card .goal-label {
+    font-size: 11px;
+    color: var(--gray-1);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .goal-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+  .goal-card p {
+    font-size: 12px;
+    color: var(--gray-1);
+    line-height: 1.7;
+  }
+
+  /* Constraint */
+  .constraint-box {
+    background: var(--paper-2);
+    padding: 18px 20px;
+    margin-top: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  .constraint-box h3 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .constraint-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .constraint-item h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .constraint-item p {
+    font-size: 12px;
+    color: var(--gray-1);
+    line-height: 1.6;
+  }
+
+  /* Flow */
+  .flow-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .flow-column {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 20px;
+  }
+  .flow-column.new { border-top: 3px solid var(--accent); }
+  .flow-column.existing { border-top: 3px solid var(--teal); }
+  .flow-header {
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .flow-header .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+    color: white;
+  }
+  .flow-column.new .flow-header .tag { background: var(--accent); }
+  .flow-column.existing .flow-header .tag { background: var(--teal); }
+  .flow-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .flow-header .desc {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-top: 4px;
+  }
+  .flow-step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .flow-step .step-num {
+    font-size: 11px;
+    color: var(--gray-2);
+    min-width: 22px;
+    padding-top: 4px;
+    font-weight: 700;
+  }
+  .flow-step .step-body {
+    flex: 1;
+    background: var(--paper-2);
+    padding: 10px 12px;
+    border-left: 2px solid var(--ink);
+    font-size: 13px;
+  }
+  .flow-step.hook .step-body {
+    border-left-color: var(--accent);
+  }
+  .flow-column.existing .flow-step.hook .step-body {
+    border-left-color: var(--teal);
+  }
+  .flow-step .step-body strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .flow-step .step-body .step-note {
+    font-size: 11px;
+    color: var(--gray-1);
+    margin-top: 4px;
+  }
+  .flow-arrow {
+    text-align: center;
+    color: var(--gray-2);
+    font-size: 12px;
+    margin: 2px 0;
+  }
+
+  /* Shared form */
+  .shared-form {
+    margin-top: 24px;
+    background: var(--paper-2);
+    padding: 24px;
+    border: 1px solid var(--line);
+  }
+  .shared-form h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .shared-form .shared-sub {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-bottom: 16px;
+  }
+  .form-questions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .form-q {
+    background: white;
+    padding: 14px;
+    border: 1px solid var(--line);
+  }
+  .form-q .q-label {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .form-q h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .form-q ul {
+    list-style: none;
+    font-size: 12px;
+    color: var(--gray-1);
+  }
+  .form-q ul li {
+    padding: 2px 0;
+    padding-left: 10px;
+    position: relative;
+  }
+  .form-q ul li::before {
+    content: '・';
+    position: absolute;
+    left: 0;
+  }
+  .form-output {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .output-card {
+    padding: 12px 14px;
+    background: white;
+    border: 1px solid var(--line);
+  }
+  .output-card .output-cond {
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .output-card .output-action {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .output-card .output-desc {
+    font-size: 11px;
+    color: var(--gray-1);
+  }
+
+  /* Tag table */
+  .tag-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .tag-group {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 16px;
+  }
+  .tag-group .tag-cat {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .tag-group h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag-pill {
+    background: var(--paper-2);
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .tag-pill.hot { background: var(--accent); color: white; border-color: var(--accent); }
+  .tag-pill.cool { background: var(--teal); color: white; border-color: var(--teal); }
+  .tag-pill.mustard { background: var(--mustard); color: white; border-color: var(--mustard); }
+
+  /* Schedule */
+  .schedule {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .day {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 12px 10px;
+    min-height: 180px;
+  }
+  .day .day-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .day .day-label {
+    font-size: 10px;
+    color: var(--gray-1);
+    margin-bottom: 10px;
+  }
+  .day .day-phase {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .day ul {
+    list-style: none;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .day ul li {
+    padding: 2px 0;
+    padding-left: 8px;
+    position: relative;
+    color: var(--gray-1);
+  }
+  .day ul li::before {
+    content: '・';
+    position: absolute;
+    left: 0;
+  }
+  .day.launch { background: var(--ink); color: white; }
+  .day.launch .day-num { color: white; }
+  .day.launch .day-label { color: rgba(255,255,255,0.7); }
+  .day.launch .day-phase { border-bottom-color: rgba(255,255,255,0.2); }
+  .day.launch ul li { color: rgba(255,255,255,0.85); }
+
+  @media (max-width: 900px) {
+    body { padding: 24px 16px; }
+    .goal-grid, .flow-wrap, .form-questions, .form-output, .tag-grid, .constraint-grid { grid-template-columns: 1fr; }
+    .schedule { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">LINE構築 MVP設計</div>
+    <h1>初期構築・データ蓄積基盤の整備</h1>
+    <div class="meta">クライアント: MEGA柴 / 2026.05 / v1.0</div>
+  </header>
+
+  <!-- Section 01 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>構築目的</h2>
+    </div>
+    <div class="section-lead">
+      現在の課題は<strong>「認知拡大に思考が偏っている」</strong>こと。サイト売上が伸び悩み、新規獲得への目線が強くなっている。本来の打ち手は<strong>データドリブン運用の実現</strong>。LINE構築の役割は、その<strong>初期データアセットを整える「器」を作る</strong>こと。配信・販促・施策連動はすべて後フェーズ。
+    </div>
+    <div class="goal-grid">
+      <div class="goal-card">
+        <div class="goal-label">目的 01</div>
+        <h3>顧客識別の起点</h3>
+        <p>サイト会員とLINE友だちを擬似的に紐付け、後続の分析・配信のIDキーを確保する。</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-label">目的 02</div>
+        <h3>属性・行動データ取得</h3>
+        <p>登録有無・認知経路・年代を起点に、施策ROIを評価できるセグメント基盤を作る。</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-label">目的 03</div>
+        <h3>仮説検証サイクル開始</h3>
+        <p>蓄積したデータから課題を抽出し、打ち手を選定する運用サイクルを立ち上げる。</p>
+      </div>
+    </div>
+    <div class="constraint-box">
+      <h3>MVPスコープ</h3>
+      <div class="constraint-grid">
+        <div class="constraint-item">
+          <h4>含めるもの</h4>
+          <p>ID連携基盤 / 最小タグ設計 / 入口別フック設計 / 共通アンケートフォーム / 週次データ突合運用</p>
+        </div>
+        <div class="constraint-item">
+          <h4>含めないもの</h4>
+          <p>リッチメニュー作り込み / 複雑なシナリオ配信 / セグメント別パーソナライズ配信 / AIチャットボット / 認知拡大施策との連動</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 02 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>ユーザーフロー</h2>
+    </div>
+    <div class="section-lead">
+      入口は<strong>新規（あいさつ経由）</strong>と<strong>既存（配信経由）</strong>の2系統。それぞれ訴求するフックは異なるが、回答フォーム本体は1本に統合し、Q1の回答内容で出し分けする。
+    </div>
+
+    <div class="flow-wrap">
+      <div class="flow-column new">
+        <div class="flow-header">
+          <span class="tag">新規ルート</span>
+          <h3>友だち追加 → ビンゴ訴求</h3>
+          <div class="desc">未登録ユーザーの初期データ取得が目的</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <strong>友だち追加</strong>
+            URLパラメータで流入経路を自動タグ付与
+            <div class="step-note">広告 / ライブ配信 / サイト / SNS / その他</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step hook">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <strong>あいさつメッセージ</strong>
+            ビンゴ大会参加権プレゼント中。3問のアンケートに回答して参加権をGET
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <strong>共通アンケートフォームへ</strong>
+            <div class="step-note">セグメントタグ: 入口_新規あいさつ経由</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-column existing">
+        <div class="flow-header">
+          <span class="tag">既存ルート</span>
+          <h3>一斉配信 → クーポン訴求</h3>
+          <div class="desc">既存友だちのメアド紐付け・温度感取得が目的</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <strong>既存友だちへ一斉配信</strong>
+            初回は全友だちにブロード配信、自己選別で精度確保
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step hook">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <strong>クーポン訴求メッセージ</strong>
+            LINE友だち限定500円OFFクーポン配布中。3問のアンケートにご回答ください
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <strong>共通アンケートフォームへ</strong>
+            <div class="step-note">セグメントタグ: 入口_既存配信経由</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shared-form">
+      <h3>共通アンケートフォーム</h3>
+      <p class="shared-sub">入口は分かれても、聞くことは同じ。3問×低負荷で離脱を抑えながら、後の分析の核となる軸を確保する。</p>
+
+      <div class="form-questions">
+        <div class="form-q">
+          <div class="q-label">Q1 / 分岐の起点</div>
+          <h4>サイト登録の有無</h4>
+          <ul>
+            <li>登録済み（→メアド入力へ）</li>
+            <li>未登録</li>
+            <li>登録済みかわからない</li>
+          </ul>
+        </div>
+        <div class="form-q">
+          <div class="q-label">Q2 / 認知計測</div>
+          <h4>サイトを知ったきっかけ</h4>
+          <ul>
+            <li>広告</li>
+            <li>SNS（X・Instagram等）</li>
+            <li>ライブ配信</li>
+            <li>友人紹介 / 検索 / その他</li>
+          </ul>
+        </div>
+        <div class="form-q">
+          <div class="q-label">Q3 / 属性把握</div>
+          <h4>年代</h4>
+          <ul>
+            <li>10代 / 20代 / 30代</li>
+            <li>40代 / 50代以上</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-output">
+        <div class="output-card">
+          <div class="output-cond">IF 入口_新規 OR 未登録</div>
+          <div class="output-action">→ ビンゴカード画像を送信</div>
+          <div class="output-desc">アンケート完了タグ + ビンゴ参加タグを自動付与</div>
+        </div>
+        <div class="output-card">
+          <div class="output-cond">IF 入口_既存 OR 登録済み</div>
+          <div class="output-action">→ クーポンコードを送信</div>
+          <div class="output-desc">アンケート完了タグ + クーポン受領タグを自動付与</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 03 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>タグ設計</h2>
+    </div>
+    <div class="section-lead">
+      タグは<strong>「軸」</strong>として設計する。流入と認知を分離し、属性と行動を分離する。これにより後の運用で<strong>「広告流入 × 20代 × 未登録 × 完了」</strong>のような多軸クロス分析が可能になる。
+    </div>
+
+    <div class="tag-grid">
+      <div class="tag-group">
+        <div class="tag-cat">軸 01</div>
+        <h4>入口セグメント</h4>
+        <div class="tag-list">
+          <span class="tag-pill hot">入口_新規あいさつ経由</span>
+          <span class="tag-pill cool">入口_既存配信経由</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <div class="tag-cat">軸 02</div>
+        <h4>サイト登録状況</h4>
+        <div class="tag-list">
+          <span class="tag-pill">登録済み_メアド取得済</span>
+          <span class="tag-pill">未登録</span>
+          <span class="tag-pill">登録状況不明</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <div class="tag-cat">軸 03</div>
+        <h4>流入経路（URLパラメータ）</h4>
+        <div class="tag-list">
+          <span class="tag-pill">流入_広告</span>
+          <span class="tag-pill">流入_ライブ配信</span>
+          <span class="tag-pill">流入_サイト</span>
+          <span class="tag-pill">流入_SNS</span>
+          <span class="tag-pill">流入_その他</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <div class="tag-cat">軸 04</div>
+        <h4>認知経路（Q2回答）</h4>
+        <div class="tag-list">
+          <span class="tag-pill">認知_広告</span>
+          <span class="tag-pill">認知_SNS</span>
+          <span class="tag-pill">認知_ライブ配信</span>
+          <span class="tag-pill">認知_紹介</span>
+          <span class="tag-pill">認知_検索</span>
+          <span class="tag-pill">認知_その他</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <div class="tag-cat">軸 05</div>
+        <h4>年代（Q3回答）</h4>
+        <div class="tag-list">
+          <span class="tag-pill">年代_10代</span>
+          <span class="tag-pill">年代_20代</span>
+          <span class="tag-pill">年代_30代</span>
+          <span class="tag-pill">年代_40代</span>
+          <span class="tag-pill">年代_50代以上</span>
+        </div>
+      </div>
+      <div class="tag-group">
+        <div class="tag-cat">軸 06</div>
+        <h4>進捗・フック受領状況</h4>
+        <div class="tag-list">
+          <span class="tag-pill mustard">アンケート完了</span>
+          <span class="tag-pill">アンケート未完了</span>
+          <span class="tag-pill mustard">ビンゴ参加</span>
+          <span class="tag-pill mustard">クーポン受領</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 04 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>スケジュール（7日間）</h2>
+    </div>
+    <div class="section-lead">
+      初期構築は<strong>1週間以内</strong>でローンチ。新規あいさつ経由は即稼働、既存向け一斉配信はローンチから2〜3日ずらしてオペ慣らし期間を設ける。
+    </div>
+
+    <div class="schedule">
+      <div class="day">
+        <div class="day-num">01</div>
+        <div class="day-label">Day 01</div>
+        <div class="day-phase">設計確定</div>
+        <ul>
+          <li>友だち追加URL発行</li>
+          <li>各種文言確定</li>
+          <li>クーポンコード設計</li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="day-num">02</div>
+        <div class="day-label">Day 02</div>
+        <div class="day-phase">素材準備</div>
+        <ul>
+          <li>ビンゴカード画像作成</li>
+          <li>クーポンコード一覧発行</li>
+          <li>既存向け配信文言</li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="day-num">03</div>
+        <div class="day-label">Day 03</div>
+        <div class="day-phase">エルステ実装</div>
+        <ul>
+          <li>アンケートフォーム構築</li>
+          <li>分岐ロジック設定</li>
+          <li>タグ付与ルール</li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="day-num">04</div>
+        <div class="day-label">Day 04</div>
+        <div class="day-phase">出し分け実装</div>
+        <ul>
+          <li>ビンゴ自動送信</li>
+          <li>クーポン自動送信</li>
+          <li>あいさつメッセ設定</li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="day-num">05</div>
+        <div class="day-label">Day 05</div>
+        <div class="day-phase">テスト</div>
+        <ul>
+          <li>全分岐動作確認</li>
+          <li>タグ付与検証</li>
+          <li>文言最終調整</li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="day-num">06</div>
+        <div class="day-label">Day 06</div>
+        <div class="day-phase">クライアント確認</div>
+        <ul>
+          <li>実機テスト</li>
+          <li>修正対応</li>
+          <li>運用マニュアル準備</li>
+        </ul>
+      </div>
+      <div class="day launch">
+        <div class="day-num">07</div>
+        <div class="day-label">Day 07 / ローンチ</div>
+        <div class="day-phase">公開・モニタリング</div>
+        <ul>
+          <li>新規あいさつ稼働</li>
+          <li>URL差し替え</li>
+          <li>初日数値ウォッチ</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 05 -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>制約と運用前提</h2>
+    </div>
+    <div class="section-lead">
+      レンタルカートのため<strong>サイトDBとエルステの自動連携は組めない</strong>。これを前提に、データ突合は<strong>週次CSV運用</strong>で擬似連携する。初回配信は精度を捨て、2回目以降のセグメント精度向上に賭ける。
+    </div>
+
+    <div class="goal-grid">
+      <div class="goal-card">
+        <div class="goal-label">前提 01</div>
+        <h3>システム連携不可</h3>
+        <p>リアルタイム連携は諦め、メアドを突合キーとした週次CSVマッチング運用で代替する。</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-label">前提 02</div>
+        <h3>クーポン手動運用</h3>
+        <p>コードは事前大量発行（100〜500件）。配布は自動、サイト側使用状況の確認は週次バッチ。</p>
+      </div>
+      <div class="goal-card">
+        <div class="goal-label">前提 03</div>
+        <h3>初回配信は精度なし</h3>
+        <p>既存セグメント精度は初回ゼロ。回答が貯まる2回目以降から本領発揮する設計。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
