@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE配信メッセージ 文面確認用</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #ffffff;
+    --paper-2: #f5f5f5;
+    --accent: #c8442e;
+    --gray-1: #666;
+    --gray-2: #999;
+    --line: #e0e0e0;
+    --line-green: #06c755;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', Meiryo, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 40px 32px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .header .eyebrow {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .header .meta {
+    font-size: 12px;
+    color: var(--gray-1);
+    margin-top: 8px;
+  }
+
+  .tone-section {
+    background: var(--paper-2);
+    padding: 24px 28px;
+    margin-bottom: 48px;
+    border-left: 3px solid var(--accent);
+  }
+  .tone-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .tone-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .tone-card {
+    background: white;
+    padding: 16px;
+    border: 1px solid var(--line);
+  }
+  .tone-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+  .tone-card p {
+    font-size: 12px;
+    color: var(--gray-1);
+    line-height: 1.6;
+  }
+  .tone-quote {
+    padding: 14px 18px;
+    background: white;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .tone-quote .source {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-1);
+    margin-top: 6px;
+  }
+
+  .section { margin-bottom: 48px; }
+  .section-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .section-num {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-lead {
+    background: var(--paper-2);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .msg-card {
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .msg-head {
+    background: var(--paper-2);
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .msg-head h3 {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .msg-tag {
+    font-size: 11px;
+    background: var(--ink);
+    color: white;
+    padding: 3px 10px;
+  }
+  .msg-tag.existing { background: #1d5e6e; }
+  .msg-tag.remind { background: #b88a2a; }
+
+  .msg-body {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+  }
+
+  .line-preview {
+    background: #8ba6c8;
+    padding: 20px 16px;
+  }
+  .line-account {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .line-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f4a04c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 2px solid white;
+  }
+  .line-account-name {
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .line-bubble {
+    background: white;
+    border-radius: 4px 14px 14px 14px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: 260px;
+    color: #333;
+  }
+  .line-button {
+    margin-top: 6px;
+    background: var(--line-green);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 18px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    max-width: 260px;
+  }
+  .line-image-placeholder {
+    margin-top: 6px;
+    background: #ddd;
+    border-radius: 6px;
+    height: 100px;
+    max-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 11px;
+  }
+
+  .msg-info {
+    padding: 20px 24px;
+  }
+  .msg-info .info-block {
+    margin-bottom: 16px;
+  }
+  .msg-info .info-block:last-child { margin-bottom: 0; }
+  .msg-info .info-label {
+    font-size: 11px;
+    color: var(--gray-1);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .msg-info .info-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  .msg-info .info-list {
+    list-style: none;
+  }
+  .msg-info .info-list li {
+    padding: 2px 0;
+    padding-left: 12px;
+    position: relative;
+    font-size: 12px;
+    color: var(--gray-1);
+  }
+  .msg-info .info-list li::before {
+    content: '・';
+    position: absolute;
+    left: 0;
+  }
+  .msg-info .info-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .msg-info .info-tag {
+    background: var(--paper-2);
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .trigger-box {
+    background: var(--paper-2);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .variables {
+    background: var(--paper-2);
+    padding: 20px;
+  }
+  .var-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .var-item {
+    background: white;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .var-item .var-key {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .var-item .var-val {
+    color: var(--ink);
+  }
+  .var-item .var-val .placeholder {
+    color: var(--gray-1);
+  }
+
+  .checklist {
+    background: var(--paper-2);
+    padding: 24px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .check-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--ink);
+    flex-shrink: 0;
+    margin-top: 3px;
+    background: white;
+  }
+  .check-body h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .check-body p {
+    font-size: 12px;
+    color: var(--gray-1);
+    line-height: 1.6;
+  }
+  .check-body .options {
+    margin-top: 6px;
+    font-size: 11px;
+  }
+  .check-body .options span {
+    background: white;
+    padding: 2px 8px;
+    margin-right: 6px;
+    border: 1px solid var(--line);
+    display: inline-block;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    body { padding: 24px 16px; }
+    .tone-grid { grid-template-columns: 1fr; }
+    .msg-body { grid-template-columns: 1fr; }
+    .var-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="header">
+    <div class="eyebrow">LINE配信メッセージ 文面確認用</div>
+    <h1>配信メッセージ骨子・トーン確認</h1>
+    <div class="meta">クライアント: MEGA柴 / 2026.05 / v1.0</div>
+  </header>
+
+  <section class="tone-section">
+    <h2>トーン方針</h2>
+    <div class="tone-grid">
+      <div class="tone-card">
+        <h4>距離感</h4>
+        <p>公式LINEで「お友達感覚で追加してください」と明言。過度な敬語は避け、フランクに語りかける。みんな・君・〜だよ、の温度。</p>
+      </div>
+      <div class="tone-card">
+        <h4>テンポ</h4>
+        <p>短文の積み重ね、「！！」の重ね打ち。長文説明は避け、結論から伝えて勢いで読ませる。</p>
+      </div>
+      <div class="tone-card">
+        <h4>キャラ</h4>
+        <p>一人称「ワン🐶」、絵文字は🐶🐾🚀🎁を中心に控えめに散らす。乱発せず、ここぞでキャラを匂わせる。</p>
+      </div>
+    </div>
+    <div class="tone-quote">
+      「ここでは登録者限定のプレゼント企画、リリース後のクーポン、イベント告知や限定ガチャ情報。普通にお喋りもしたいので、お友達感覚で追加してください」
+      <span class="source">— MEGA柴公式LINE プロフィール文より</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <h2>友だち追加直後あいさつ（新規ルート）</h2>
+    </div>
+    <div class="section-lead">
+      新規ユーザーが友だち追加した直後の自動送信。公式LINEプロフィール文の役割定義をそのまま踏襲し、ビンゴ参加権でアンケート回答に誘導。
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>追加ありがとう🐶</h3>
+        <div class="msg-tag">新規</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">追加ありがとう🐶
+MEGA柴公式LINEへようこそ！
+
+ここでは
+🎁登録者限定プレゼント企画
+🎫リリース後のクーポン配布
+📢イベント告知・限定ガチャ情報
+
+をお届けしていくよ！
+普通におしゃべりもしたいので
+お友達感覚で絡んでね🐾
+
+▼さっそく企画開催中▼
+🎯ビンゴ大会参加権プレゼント🎯
+
+3問のアンケートに答えるだけで
+オリジナルビンゴカードGET！
+
+※30秒で終わるよ〜</div>
+          <div class="line-button">▶ 今すぐ参加する</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">友だち追加イベント発火時に自動送信</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">目的</div>
+            <div class="info-text">アンケート起動 → 流入経路タグ確定 → ビンゴ参加権を完了報酬として獲得</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>冒頭「追加ありがとう🐶」で即座にキャラ提示</li>
+              <li>「絡んでね」「終わるよ〜」など柔らかい語尾</li>
+              <li>公式LINEプロフィール文の役割定義を冒頭で踏襲</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <div class="info-label">自動付与タグ</div>
+            <div class="info-tag-row">
+              <span class="info-tag">流入_[URL別]</span>
+              <span class="info-tag">入口_新規あいさつ経由</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <h2>既存友だち向け一斉配信</h2>
+    </div>
+    <div class="section-lead">
+      既存友だち全員への初回ブロード配信。クーポン訴求でメアド再申告・利用実態の自己選別を促す。初回は精度を捨ててデータ蓄積優先。
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>500円OFFクーポン配布のお知らせ</h3>
+        <div class="msg-tag existing">既存</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">やっほー🐶
+MEGA柴です！
+
+LINE友だち限定で
+お得なお知らせがあるよ📢
+
+🎫500円OFFクーポン配布中🎫
+
+いつも応援してくれてる
+みんなへの感謝企画！
+
+▼受け取り方▼
+3問のかんたんアンケートに答えるだけ
+回答後すぐクーポンコードが届くよ
+
+📅有効期限：発行から14日間
+💰1,000円以上のお買い物で使えるよ
+
+ぜひ使ってね🐾</div>
+          <div class="line-button">▶ アンケートに回答する</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">ローンチ後2〜3日経過 / 全友だちへ手動一斉配信</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">目的</div>
+            <div class="info-text">既存層からメアド取得 → サイト購入履歴との突合キー確保 / 利用温度感のセグメント化</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>「やっほー🐶」で一気に距離を縮める</li>
+              <li>「いつも応援してくれてるみんなへの感謝」で関係性訴求</li>
+              <li>説明は端的、テンポ重視で読ませる</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <div class="info-label">自動付与タグ</div>
+            <div class="info-tag-row">
+              <span class="info-tag">入口_既存配信経由</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <h2>アンケート完了 → ビンゴカード送信</h2>
+    </div>
+    <div class="section-lead">
+      新規ルートまたはQ1で「未登録 / 不明」回答者がアンケート完了後に自動で受け取る報酬メッセージ。
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>ビンゴカード送信</h3>
+        <div class="msg-tag">新規</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">回答ありがとう🐶✨
+
+▼君のビンゴカード▼</div>
+          <div class="line-image-placeholder">ビンゴカード画像</div>
+          <div class="line-bubble" style="margin-top: 6px;">📅抽選日：[日付]
+📱当選番号はこのLINEで配信するよ！
+
+通知ONにしておいてね🔔
+当選ご報告お待ちしてます🎯</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">アンケート完了 AND (新規入口 OR Q1=未登録/不明)</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">目的</div>
+            <div class="info-text">完了報酬を即座に届け、抽選日への期待でブロック率を下げる</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>「君のビンゴカード」で個別化感を演出</li>
+              <li>「通知ON」要請でその後の当選番号配信開封率を担保</li>
+              <li>「当選ご報告お待ちしてます」でファンとの一体感を残す</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <div class="info-label">自動付与タグ</div>
+            <div class="info-tag-row">
+              <span class="info-tag">アンケート完了</span>
+              <span class="info-tag">ビンゴ参加</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <h2>アンケート完了 → クーポン送信</h2>
+    </div>
+    <div class="section-lead">
+      既存ルートまたはQ1で「登録済み」回答者がアンケート完了後に自動で受け取る報酬メッセージ。
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>クーポンコード送信</h3>
+        <div class="msg-tag existing">既存</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">回答ありがとう🐶🎫
+
+▼500円OFFクーポンコード▼
+【 XXXX-XXXX-XXXX 】
+↑タップでコピーできるよ
+
+▼使い方▼
+①下のサイトにアクセス
+②お会計画面でコード入力
+③500円OFF適用！
+
+📅有効期限：YYYY/MM/DDまで
+💰1,000円以上のお買い物で使えるよ
+
+楽しんでね〜🐾</div>
+          <div class="line-button">▶ サイトを開く</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">アンケート完了 AND (既存入口 OR Q1=登録済み)</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">目的</div>
+            <div class="info-text">クーポン送信 → サイト誘導 → 既存層の購入再活性化のきっかけ作り</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>使い方を①②③で番号化、誰でも迷わない構造</li>
+              <li>「楽しんでね〜🐾」で取引感を消す</li>
+              <li>クーポンコードは事前発行・1人1コード割当て</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <div class="info-label">自動付与タグ</div>
+            <div class="info-tag-row">
+              <span class="info-tag">アンケート完了</span>
+              <span class="info-tag">クーポン受領</span>
+              <span class="info-tag">登録済み_メアド取得済</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <h2>アンケート未完了者リマインド</h2>
+    </div>
+    <div class="section-lead">
+      初回送信から1〜2日経過した未完了者へのリマインド。新規・既存それぞれに分けて配信。
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>新規向けリマインド</h3>
+        <div class="msg-tag remind">リマインド</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">🐶ちょっとお知らせ！
+
+ビンゴ大会参加権の受付
+まだ間に合うよ〜🎯
+
+3問のアンケートに答えるだけ
+30秒で完了！
+
+抽選日：[日付]
+忘れずにね🐾</div>
+          <div class="line-button">▶ アンケートに回答する</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">友だち追加から1〜2日経過 AND アンケート未完了</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>圧をかけない・押し付けない言い方</li>
+              <li>「忘れずにね」で軽くナッジ</li>
+              <li>抽選日明示で機会損失感を演出</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-head">
+        <h3>既存向けリマインド</h3>
+        <div class="msg-tag remind">リマインド</div>
+      </div>
+      <div class="msg-body">
+        <div class="line-preview">
+          <div class="line-account">
+            <div class="line-avatar">🐶</div>
+            <div class="line-account-name">MEGA柴公式</div>
+          </div>
+          <div class="line-bubble">🐶お知らせだよ〜
+
+500円OFFクーポン
+まだ受け取ってない人いない？🎫
+
+3問のアンケートで
+すぐクーポンコード届くよ
+
+受付は[日付]まで！
+お見逃しなく🐾</div>
+          <div class="line-button">▶ アンケートに回答する</div>
+        </div>
+        <div class="msg-info">
+          <div class="info-block">
+            <div class="info-label">配信タイミング</div>
+            <div class="trigger-box">初回配信から1〜2日経過 AND アンケート未完了</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">補足</div>
+            <ul class="info-list">
+              <li>「いない？」の問いかけで圧を下げる</li>
+              <li>「お見逃しなく」で〆切意識づけ</li>
+              <li>初回未開封のみ対象に絞ることでブロック予防</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <h2>差し込み変数一覧</h2>
+    </div>
+    <div class="section-lead">
+      上記文面で [ ] で示した箇所は、運用前にクライアントとの調整で確定する変数。
+    </div>
+
+    <div class="variables">
+      <div class="var-grid">
+        <div class="var-item">
+          <div class="var-key">[サービス名]</div>
+          <div class="var-val">例: MEGA柴 / MEGA柴公式 等 <span class="placeholder">（正式表記の確認）</span></div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">[サイトURL]</div>
+          <div class="var-val">クーポン利用先URL <span class="placeholder">（計測用パラメータ付与）</span></div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">[アンケートボタンURL]</div>
+          <div class="var-val">エルステ回答フォームURL</div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">[日付] 抽選日</div>
+          <div class="var-val">ビンゴ抽選実施日</div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">[日付] クーポン期限</div>
+          <div class="var-val">発行日 + 14日（仮定）</div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">クーポンOFF額</div>
+          <div class="var-val">500円 OFF（仮定）</div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">クーポン利用条件</div>
+          <div class="var-val">1,000円以上のお買い物（仮定）</div>
+        </div>
+        <div class="var-item">
+          <div class="var-key">ビンゴ景品内容</div>
+          <div class="var-val"><span class="placeholder">クライアント側で決定</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <h2>クライアント確認チェックリスト</h2>
+    </div>
+    <div class="section-lead">
+      この資料をベースに、クライアントから明示的に確認・承認を得たい論点を5項目に整理。順番に握って文面を確定させる。
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-body">
+          <h4>01. 語尾・呼びかけのトーン</h4>
+          <p>「〜だよ」「みんな」「君」レベルの距離感で問題ないか。もっと丁寧寄り・もっとフランク寄りに調整するか。</p>
+          <div class="options">
+            <span>このままOK</span>
+            <span>もう少し丁寧に</span>
+            <span>もっとフランクに</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-body">
+          <h4>02. 絵文字の量</h4>
+          <p>本骨子は控えめ寄り。本人のX投稿よりやや抑えた配分。クライアントの希望水準は？</p>
+          <div class="options">
+            <span>このままOK</span>
+            <span>もっと多めに</span>
+            <span>もっと少なめに</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-body">
+          <h4>03. 「🐶ワン」キャラの使用頻度</h4>
+          <p>各メッセージ冒頭に🐶を入れるルールでOKか。もっと文中にも散らすか。</p>
+          <div class="options">
+            <span>冒頭のみでOK</span>
+            <span>文中にも散らす</span>
+            <span>もっと抑える</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-body">
+          <h4>04. クーポン具体値</h4>
+          <p>仮定値「500円OFF / 14日間 / 1,000円以上で利用可」で運用してよいか。</p>
+          <div class="options">
+            <span>このままOK</span>
+            <span>OFF額変更</span>
+            <span>条件変更</span>
+            <span>期限変更</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <div class="check-box"></div>
+        <div class="check-body">
+          <h4>05. ビンゴ景品の具体内容</h4>
+          <p>抽選日の案内文面に景品が組み込めるよう、景品内容と抽選日を確定する必要あり。</p>
+          <div class="options">
+            <span>景品確定済み</span>
+            <span>これから検討</span>
+            <span>369で提案ほしい</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
