@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>画面モック｜テレビ日額レンタルDX</title>
+<style>
+  /* ===== 共通（実装 public/*.html と同じトーン） ===== */
+  :root { --ac:#0d9488; --ink:#0f172a; --mut:#64748b; --line:#e2e8f0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:#e2e8f0; color:var(--ink); }
+
+  /* ナビ（モック専用の操作バー） */
+  .mocknav { position:sticky; top:0; z-index:10; background:var(--ink); color:#fff; padding:10px 16px;
+             display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .mocknav .ttl { font-weight:800; font-size:13px; margin-right:8px; }
+  .mocknav button { font-size:12px; padding:6px 12px; border-radius:20px; border:1px solid #334155;
+                    background:#1e293b; color:#cbd5e1; cursor:pointer; }
+  .mocknav button.on { background:var(--ac); border-color:var(--ac); color:#fff; font-weight:700; }
+  .note { max-width:960px; margin:14px auto 0; padding:0 16px; font-size:12px; color:#475569; }
+
+  /* スマホ枠（患者画面用） */
+  .stage { display:flex; justify-content:center; padding:20px 16px 40px; }
+  .phone { width:380px; border-radius:36px; background:#0f172a; padding:14px 10px; box-shadow:0 18px 50px rgba(2,6,23,.35); }
+  .phone .notch { width:120px; height:22px; background:#0f172a; border-radius:0 0 14px 14px; margin:0 auto 2px; }
+  .screen { background:#f1f5f9; border-radius:24px; overflow:hidden; min-height:640px; display:flex; flex-direction:column; }
+  .appwrap { background:#fff; flex:1; display:flex; flex-direction:column; }
+  header.app { background:var(--ac); color:#fff; padding:16px 18px; }
+  header.app h1 { margin:0; font-size:17px; }
+  header.app p { margin:4px 0 0; font-size:11px; opacity:.9; }
+  .body { padding:18px; flex:1; }
+  .card { border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; background:#fff; }
+  label { font-size:12px; font-weight:700; color:var(--mut); }
+  .bed { font-size:22px; font-weight:900; margin-top:4px; }
+  .room { font-size:12px; color:var(--mut); }
+  .opts { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
+  .opt { border:2px solid var(--line); border-radius:12px; padding:12px 6px; text-align:center; cursor:pointer; }
+  .opt.sel { border-color:var(--ac); background:#f0fdfa; }
+  .opt .u { font-size:19px; font-weight:900; }
+  .opt .p { font-size:11px; color:var(--mut); margin-top:2px; }
+  .pay { width:100%; padding:15px; background:var(--ac); color:#fff; border:none; border-radius:12px;
+         font-weight:800; font-size:15px; margin-top:6px; cursor:pointer; }
+  .ghost { width:100%; padding:12px; background:#fff; color:var(--mut); border:1px solid var(--line);
+           border-radius:12px; font-size:13px; margin-top:10px; cursor:pointer; }
+  .mut { color:var(--mut); font-size:12px; }
+  .center { text-align:center; }
+  .tv { font-size:52px; }
+  .big { font-size:19px; font-weight:900; margin-top:8px; }
+  .count { font-size:36px; font-weight:900; color:var(--ac); font-variant-numeric:tabular-nums; }
+  .qrbox { border:2px dashed #cbd5e1; border-radius:14px; padding:26px 10px; text-align:center; color:var(--mut); font-size:13px; }
+  .qrbox .q { font-size:44px; }
+  .steps { display:flex; gap:6px; justify-content:center; padding:10px 0 4px; }
+  .steps i { width:8px; height:8px; border-radius:50%; background:#cbd5e1; }
+  .steps i.on { background:var(--ac); }
+
+  /* Stripe風決済画面 */
+  .stripehead { background:#635bff; color:#fff; padding:16px 18px; font-weight:800; font-size:14px; }
+  .field { margin-bottom:12px; }
+  .field input { width:100%; padding:11px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; background:#fff; }
+  .paybtn-stripe { width:100%; padding:14px; background:#635bff; color:#fff; border:none; border-radius:8px; font-weight:800; cursor:pointer; }
+  .testbadge { display:inline-block; background:#fef3c7; color:#92400e; font-size:10px; font-weight:700;
+               padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle; }
+
+  /* 管理画面（public/admin.html と同トーン） */
+  .adminstage { max-width:960px; margin:0 auto; padding:20px 16px 40px; display:none; }
+  .admin { background:#0f172a; border-radius:16px; overflow:hidden; color:#e2e8f0; box-shadow:0 18px 50px rgba(2,6,23,.35); }
+  .admin header { padding:14px 20px; background:#111827; border-bottom:1px solid #1f2937; display:flex; justify-content:space-between; align-items:center; }
+  .admin h1 { margin:0; font-size:15px; }
+  .badge { font-size:10px; background:var(--ac); padding:3px 8px; border-radius:20px; margin-left:6px; }
+  .badge.pay { background:#6366f1; }
+  .grid { display:grid; grid-template-columns:1.1fr 1fr; gap:14px; padding:18px; }
+  @media(max-width:760px){ .grid{ grid-template-columns:1fr; } .phone{ width:100%; max-width:380px; } }
+  .panel { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:14px; }
+  .panel h2 { font-size:12px; margin:0 0 10px; color:#94a3b8; letter-spacing:.05em; }
+  .bedsgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .bcard { border:1px solid #1f2937; border-radius:12px; padding:12px; text-align:center; }
+  .bcard.on { border-color:var(--ac); background:#042f2e; }
+  .bcard .id { font-weight:800; font-size:14px; }
+  .bcard .name { font-size:10px; color:#64748b; margin:2px 0 6px; }
+  .bcard .tvv { font-size:26px; }
+  .rem { font-size:17px; font-weight:900; color:#2dd4bf; font-variant-numeric:tabular-nums; }
+  .offt { color:#475569; font-size:11px; }
+  .btn-off { margin-top:6px; font-size:10px; background:#7f1d1d; color:#fecaca; border:1px solid #991b1b;
+             border-radius:8px; padding:3px 9px; cursor:pointer; }
+  .kpi { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+  .kpi .box { border:1px solid #1f2937; border-radius:10px; padding:9px; text-align:center; }
+  .kpi .v { font-size:18px; font-weight:900; color:#fbbf24; }
+  .kpi .l { font-size:9px; color:#64748b; margin-top:2px; }
+  table { width:100%; border-collapse:collapse; font-size:11px; }
+  th,td { text-align:left; padding:5px 7px; border-bottom:1px solid #1f2937; }
+  th { color:#64748b; font-weight:600; }
+  .log { font-family:ui-monospace,monospace; font-size:11px; line-height:1.7; max-height:300px; overflow:auto; }
+  .log .on{color:#2dd4bf;} .log .off{color:#94a3b8;} .log .payl{color:#fbbf24;} .log .info{color:#64748b;}
+</style>
+</head>
+<body>
+
+<!-- モック操作バー -->
+<div class="mocknav">
+  <span class="ttl">📱 画面モック</span>
+  <button data-s="s1" class="on">① QR読取</button>
+  <button data-s="s2">② 時間選択</button>
+  <button data-s="s3">③ 決済</button>
+  <button data-s="s4">④ 視聴中</button>
+  <button data-s="s5">⑤ 満了</button>
+  <button data-s="admin">🖥 管理画面</button>
+</div>
+<p class="note">※ サーバ不要の静的モックです（このファイルを開くだけで動作）。ボタンで画面遷移を確認できます。実装は
+<code>public/index.html</code>（患者）・<code>public/admin.html</code>（管理）。</p>
+
+<!-- ===== 患者フロー（スマホ枠） ===== -->
+<div class="stage" id="phoneStage">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen"><div class="appwrap">
+      <header class="app">
+        <h1>入院中のテレビ</h1>
+        <p>QRを読み取って、見たい時間だけご予約ください</p>
+      </header>
+      <div class="steps" id="steps"></div>
+      <div class="body" id="app"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ===== 管理画面 ===== -->
+<div class="adminstage" id="adminStage">
+  <div class="admin">
+    <header>
+      <h1>テレビ日額レンタル｜管理画面
+        <span class="badge">device: mock</span>
+        <span class="badge pay">pay: mock</span>
+      </h1>
+      <span class="mut" style="color:#64748b;font-size:11px" id="clock"></span>
+    </header>
+    <div class="grid">
+      <div>
+        <div class="panel">
+          <h2>ベッドの状態</h2>
+          <div class="bedsgrid">
+            <div class="bcard on">
+              <div class="id">B-101</div><div class="name">301号室 Aベッド</div>
+              <div class="tvv">📺</div><div class="rem" id="admRem">02:45</div>
+              <button class="btn-off" onclick="alert('（モック）強制OFF：確認ダイアログ→理由入力→監査ログ記録')">強制OFF</button>
+            </div>
+            <div class="bcard">
+              <div class="id">B-102</div><div class="name">302号室 Bベッド</div>
+              <div class="tvv">⬛</div><div class="offt">消灯</div>
+            </div>
+            <div class="bcard">
+              <div class="id">B-103</div><div class="name">303号室 Cベッド</div>
+              <div class="tvv">⬛</div><div class="offt">消灯</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h2>売上・稼働率（直近24時間）</h2>
+          <div class="kpi">
+            <div class="box"><div class="v">¥4,200</div><div class="l">売上</div></div>
+            <div class="box"><div class="v">9</div><div class="l">決済件数</div></div>
+            <div class="box"><div class="v">38.2%</div><div class="l">平均稼働率</div></div>
+          </div>
+          <div style="font-size:11px;color:#94a3b8;line-height:1.9">
+            B-101　<span style="display:inline-block;height:8px;width:110px;background:var(--ac);border-radius:4px"></span> 68.0%<br>
+            B-102　<span style="display:inline-block;height:8px;width:52px;background:var(--ac);border-radius:4px"></span> 32.5%<br>
+            B-103　<span style="display:inline-block;height:8px;width:23px;background:var(--ac);border-radius:4px"></span> 14.1%
+          </div>
+        </div>
+        <div class="panel" style="margin-top:14px">
+          <h2>予約履歴</h2>
+          <table>
+            <thead><tr><th>ID</th><th>ベッド</th><th>単位</th><th>金額</th><th>状態</th></tr></thead>
+            <tbody>
+              <tr><td>R0009</td><td>B-101</td><td>3</td><td>¥900</td><td>🟢 有効</td></tr>
+              <tr><td>R0008</td><td>B-103</td><td>1</td><td>¥300</td><td>満了</td></tr>
+              <tr><td>R0007</td><td>B-102</td><td>7</td><td>¥2,100</td><td>🔴 停止</td></tr>
+              <tr><td>R0006</td><td>B-101</td><td>1</td><td>¥300</td><td>満了</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>ライブログ（点いた / 消えた）</h2>
+        <div class="log" id="admLog">
+          <div class="on">10:12:04　[B-101] テレビ ON（mode=IR 満了 10:15:04 まで）</div>
+          <div class="payl">10:12:04　決済OK R0009（¥900）</div>
+          <div class="info">10:12:03　予約作成 R0009（B-101 / 3単位 / ¥900）</div>
+          <div class="off">10:08:51　[B-103] テレビ OFF（満了（自動OFF））</div>
+          <div class="info">10:05:40　運営操作: 強制OFF [B-102]（理由: 点検）</div>
+          <div class="off">10:05:40　[B-102] テレビ OFF（強制OFF: 点検）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== モックのダミーデータ =====
+const M = { bed:'B-101', room:'301号室 Aベッド', price:300, units:3, remaining:165 };
+
+const screens = {
+  // ① QR読取直後（ベッド確定）
+  s1: () => `
+    <div class="card center">
+      <div class="qrbox"><div class="q">🔳</div>ベッドのQRコードを読み取りました</div>
+      <div style="margin-top:14px"><label>ベッド</label>
+        <div class="bed">${M.bed}</div><div class="room">${M.room}</div></div>
+    </div>
+    <button class="pay" onclick="go('s2')">このベッドで予約する</button>
+    <p class="mut center" style="margin-top:10px">違うベッドの場合は、ベッド柵のQRを読み直してください</p>`,
+
+  // ② 時間選択
+  s2: () => `
+    <div class="card">
+      <label>ベッド</label>
+      <div class="bed">${M.bed}</div><div class="room">${M.room}</div>
+    </div>
+    <div class="card">
+      <label>利用時間を選ぶ</label>
+      <div class="opts">
+        ${[1,3,7].map(u=>`
+          <div class="opt ${u===M.units?'sel':''}" onclick="M.units=${u};go('s2')">
+            <div class="u">${u}日</div><div class="p">¥${(M.price*u).toLocaleString()}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <button class="pay" onclick="go('s3')">予約して支払う（¥${(M.price*M.units).toLocaleString()}）</button>
+    <p class="mut center" style="margin-top:10px">※デモ環境です（テスト決済）</p>`,
+
+  // ③ 決済（Stripe Checkout 風）
+  s3: () => `
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="stripehead">💳 お支払い <span class="testbadge">TEST MODE</span></div>
+      <div style="padding:16px">
+        <div class="mut" style="margin-bottom:10px">テレビ利用 ${M.units}日（${M.bed}）　<b style="color:var(--ink)">¥${(M.price*M.units).toLocaleString()}</b></div>
+        <div class="field"><label>カード番号</label><input value="4242 4242 4242 4242" readonly></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="field"><label>有効期限</label><input value="12/34" readonly></div>
+          <div class="field"><label>CVC</label><input value="123" readonly></div>
+        </div>
+        <button class="paybtn-stripe" onclick="go('s4')">¥${(M.price*M.units).toLocaleString()} を支払う</button>
+      </div>
+    </div>
+    <button class="ghost" onclick="go('s2')">← 戻る（キャンセル）</button>`,
+
+  // ④ 視聴中（カウントダウン）
+  s4: () => `
+    <div class="card center">
+      <div class="tv">📺</div>
+      <div class="big">テレビは視聴できます</div>
+      <div class="mut">${M.bed}</div>
+      <div class="count" id="cd">--:--</div>
+      <div class="mut">残り</div>
+      <div class="mut" style="margin-top:14px">予約 R0009／${M.units}日／¥${(M.price*M.units).toLocaleString()}</div>
+    </div>
+    <button class="ghost" onclick="go('s2')">時間を延長する（追加予約）</button>
+    <p class="mut center" style="margin-top:8px">満了になると自動でテレビが消えます</p>`,
+
+  // ⑤ 満了
+  s5: () => `
+    <div class="card center">
+      <div class="tv">⬛</div>
+      <div class="big">視聴が終了しました</div>
+      <div class="mut">${M.bed}</div>
+      <div class="mut" style="margin-top:14px">ご利用ありがとうございました</div>
+    </div>
+    <button class="pay" onclick="go('s2')">もう一度予約する</button>`,
+};
+
+const order = ['s1','s2','s3','s4','s5'];
+let cur = 's1', cdTimer = null, rem = M.remaining;
+
+function go(s) {
+  cur = s;
+  clearInterval(cdTimer);
+  document.querySelectorAll('.mocknav button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
+  const isAdmin = s === 'admin';
+  document.getElementById('phoneStage').style.display = isAdmin ? 'none' : 'flex';
+  document.getElementById('adminStage').style.display = isAdmin ? 'block' : 'none';
+  if (isAdmin) return;
+
+  document.getElementById('app').innerHTML = screens[s]();
+  document.getElementById('steps').innerHTML =
+    order.map(o => `<i class="${o===s?'on':''}"></i>`).join('');
+
+  if (s === 's4') { // カウントダウン演出（0で満了画面へ）
+    rem = M.remaining;
+    const draw = () => {
+      const el = document.getElementById('cd'); if (!el) return;
+      const m = String(Math.floor(rem/60)).padStart(2,'0'), ss = String(rem%60).padStart(2,'0');
+      el.textContent = `${m}:${ss}`;
+      if (rem-- <= 0) { clearInterval(cdTimer); go('s5'); }
+    };
+    draw(); cdTimer = setInterval(draw, 1000);
+  }
+}
+
+document.querySelectorAll('.mocknav button').forEach(b => b.onclick = () => go(b.dataset.s));
+setInterval(() => {
+  const c = document.getElementById('clock');
+  if (c) c.textContent = new Date().toLocaleTimeString('ja-JP') + '　1単位=1日（本番想定）';
+}, 1000);
+go('s1');
+</script>
+</body>
+</html>
